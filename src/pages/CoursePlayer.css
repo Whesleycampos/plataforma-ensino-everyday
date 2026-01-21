@@ -1,0 +1,111 @@
+/* Main Layout Container */
+.course-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--bg-dark);
+}
+
+/* Sidebar Styling (extends default sidebar) */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border-color);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    z-index: 50;
+    transition: transform 0.3s ease;
+}
+
+/* Main Content Area (Video + Desc) */
+.course-main {
+    margin-left: 260px;
+    /* Default Desktop */
+    flex: 1;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    transition: margin-left 0.3s ease;
+}
+
+.course-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+/* Right Lesson List */
+.course-list {
+    width: 380px;
+    /* Slightly wider for the card look */
+    background: var(--bg-main);
+    /* Match main bg for separation contrast */
+    border-left: 1px solid var(--border-color);
+    overflow-y: auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Module Styling */
+.module-item {
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-card);
+}
+
+.module-header:hover {
+    background-color: var(--bg-hover, rgba(0, 0, 0, 0.02));
+}
+
+.lesson-item:hover {
+    background-color: var(--bg-hover, rgba(0, 0, 0, 0.02));
+}
+
+/* Scrollbar Tweaks */
+.course-content::-webkit-scrollbar,
+.course-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.course-content::-webkit-scrollbar-thumb,
+.course-list::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 3px;
+}
+
+
+/* Responsive Rules */
+@media (max-width: 768px) {
+
+    /* Hide Left Sidebar on Mobile */
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    /* Reset Main Margin */
+    .course-main {
+        margin-left: 0;
+        flex-direction: column;
+        /* Stack video and list vertical */
+        height: auto;
+        overflow: visible;
+    }
+
+    .course-content {
+        padding: 1rem;
+        height: auto;
+    }
+
+    /* Move Lesson List to Bottom and Full Width */
+    .course-list {
+        width: 100%;
+        height: auto;
+        max-height: 500px;
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+    }
+}

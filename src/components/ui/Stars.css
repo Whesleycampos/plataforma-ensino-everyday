@@ -1,0 +1,32 @@
+/* Starry background effect */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    background: transparent;
+}
+
+.stars::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image:
+        radial-gradient(1px 1px at 10% 10%, #fff, transparent),
+        radial-gradient(1px 1px at 20% 20%, #fff, transparent),
+        radial-gradient(1px 1px at 30% 30%, #fff, transparent),
+        radial-gradient(2px 2px at 40% 40%, #fff, transparent),
+        radial-gradient(1px 1px at 50% 50%, #fff, transparent),
+        radial-gradient(1px 1px at 60% 60%, #fff, transparent),
+        radial-gradient(2px 2px at 70% 70%, #fff, transparent),
+        radial-gradient(1px 1px at 80% 80%, #fff, transparent),
+        radial-gradient(1px 1px at 90% 90%, #fff, transparent);
+    background-size: 550px 550px;
+    opacity: 0.3;
+}

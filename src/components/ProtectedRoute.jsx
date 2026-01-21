@@ -1,0 +1,67 @@
+import React, { useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+
+/**
+ * ProtectedRoute - Componente que protege rotas autenticadas
+ * Redireciona para /login se o usuário não estiver autenticado
+ */
+const ProtectedRoute = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Verificar sessão atual
+        const checkUser = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            setUser(session?.user ?? null);
+            setLoading(false);
+        };
+
+        checkUser();
+
+        // Escutar mudanças de autenticação
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+            (_event, session) => {
+                setUser(session?.user ?? null);
+                setLoading(false);
+            }
+        );
+
+        return () => subscription.unsubscribe();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex-center" style={{
+                height: '100vh',
+                flexDirection: 'column',
+                gap: '1rem'
+            }}>
+                <div style={{
+                    width: '40px',
+                    height: '40px',
+                    border: '3px solid var(--border-color)',
+                    borderTop: '3px solid var(--primary)',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                }} />
+                <p style={{ color: 'var(--text-secondary)' }}>Carregando...</p>
+                <style>{`
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `}</style>
+            </div>
+        );
+    }
+
+    if (!user) {
+        return <Navigate to="/login" replace />;
+    }
+
+    return children;
+};
+
+export default ProtectedRoute;
