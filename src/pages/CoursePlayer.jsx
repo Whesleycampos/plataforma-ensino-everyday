@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './CoursePlayer.css'; // Import Responsive Styles
+import './CoursePlayer.css';
 import Sidebar from '../components/Sidebar';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -15,12 +15,11 @@ const CoursePlayer = () => {
     const location = useLocation();
     const [course, setCourse] = useState(null);
     const [modules, setModules] = useState([]);
-    const [flatLessons, setFlatLessons] = useState([]); // Keep flat list for easy navigation logic
+    const [flatLessons, setFlatLessons] = useState([]);
     const [activeLessonId, setActiveLessonId] = useState(null);
     const [completedLessons, setCompletedLessons] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Load course data
     useEffect(() => {
         async function loadData() {
             try {
@@ -31,21 +30,13 @@ const CoursePlayer = () => {
                 setFlatLessons(lessons);
                 setCompletedLessons(progress);
 
-                // --- MERGE STATIC STRUCTURE WITH DB DATA ---
-                // We use the static curriculum as the base structure.
-                // We try to find a matching lesson in the DB by title.
-                // If found, we attach the real lesson details (id, video_url).
-                // If not found, we mark it as 'locked' or 'coming soon' (or just show title without link).
-
                 const mergedModules = courseCurriculum.map((module, modIndex) => ({
                     id: `mod-${modIndex}`,
                     title: module.title,
                     lessons: module.lessons.map((lessonTitle, lessIndex) => {
-                        // Fuzzy match or exact match the title
-                        // For now, exact match or partial include
                         const dbLesson = lessons.find(l =>
                             l.title.toLowerCase().trim() === lessonTitle.toLowerCase().trim() ||
-                            l.title.toLowerCase().includes(lessonTitle.toLowerCase().substring(0, 20)) // primitive fuzzy
+                            l.title.toLowerCase().includes(lessonTitle.toLowerCase().substring(0, 20))
                         );
 
                         return {
@@ -60,26 +51,21 @@ const CoursePlayer = () => {
 
                 setModules(mergedModules);
 
-                // Set active lesson logic
                 const passedModuleIndex = location.state?.moduleIndex;
 
                 if (passedModuleIndex !== undefined && passedModuleIndex !== null && mergedModules[passedModuleIndex]) {
-                    // Check if specific module requested
                     const targetModule = mergedModules[passedModuleIndex];
                     if (targetModule && targetModule.lessons.length > 0) {
                         const firstReal = targetModule.lessons.find(l => !l.isPlaceholder);
                         setActiveLessonId(firstReal ? firstReal.id : targetModule.lessons[0].id);
                     }
                 } else if (mergedModules.length > 0 && mergedModules[0].lessons.length > 0) {
-                    // Default fallback
                     const firstReal = mergedModules[0].lessons.find(l => !l.isPlaceholder);
                     if (firstReal) setActiveLessonId(firstReal.id);
                     else setActiveLessonId(mergedModules[0].lessons[0].id);
                 } else if (lessons.length > 0) {
                     setActiveLessonId(lessons[0].id);
                 }
-                // --------------------------------
-
             } catch (error) {
                 console.error(error);
             } finally {
@@ -87,7 +73,7 @@ const CoursePlayer = () => {
             }
         }
         loadData();
-    }, [id]);
+    }, [id, location.state]);
 
     const handleMarkComplete = async () => {
         if (!activeLessonId || activeLessonId.toString().startsWith('legacy')) return;
@@ -95,9 +81,10 @@ const CoursePlayer = () => {
         setCompletedLessons([...completedLessons, activeLessonId]);
     };
 
-    // Find the active lesson object from either grouping or flat list fallback
     const activeLesson = flatLessons.find(l => l.id === activeLessonId) ||
         modules.flatMap(m => m.lessons).find(l => l.id === activeLessonId);
+    const currentLessonIndex = flatLessons.findIndex(l => l.id === activeLessonId);
+    const nextLesson = currentLessonIndex >= 0 ? flatLessons[currentLessonIndex + 1] : null;
 
     if (loading) return <div className="flex-center" style={{ height: '100vh' }}>Carregando aula...</div>;
     if (!course) return <div className="flex-center" style={{ height: '100vh' }}>Curso não encontrado</div>;
@@ -107,29 +94,38 @@ const CoursePlayer = () => {
             <Sidebar />
 
             <main className="course-main">
-                {/* Content Area */}
                 <div className="course-content">
-                    <div style={{ marginBottom: '1.5rem' }}>
-                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{course.title}</span>
-                        <h1 style={{ marginTop: '0.5rem', fontSize: '1.75rem' }}>
-                            {activeLesson?.title || 'Selecione uma aula'}
-                        </h1>
+                    <div className="course-header">
+                        <div>
+                            <p className="eyebrow">Everyday Originals</p>
+                            <h1 style={{ marginTop: '0.4rem', fontSize: '1.9rem' }}>
+                                {activeLesson?.title || course.title}
+                            </h1>
+                            <div className="course-meta">
+                                <span className="pill">{course.title}</span>
+                                <span className="pill">{flatLessons.length} aulas</span>
+                                <span className="pill">{activeLesson?.duration || '5 min'}</span>
+                            </div>
+                        </div>
+                        <Button
+                            variant={completedLessons.includes(activeLessonId) ? 'outline' : 'primary'}
+                            onClick={handleMarkComplete}
+                        >
+                            {completedLessons.includes(activeLessonId) ? (
+                                <><CheckCircle size={18} color="var(--success)" /> Aula concluída</>
+                            ) : (
+                                <>Marcar como concluída</>
+                            )}
+                        </Button>
                     </div>
 
-                    {/* Video Player */}
-                    <div style={{
-                        width: '100%',
-                        aspectRatio: '16/9',
-                        background: 'black',
-                        borderRadius: 'var(--radius-lg)',
-                        marginBottom: '2rem',
-                        position: 'relative',
-                        overflow: 'hidden'
-                    }}>
+                    <div className="player-frame">
+                        <div className="player-overlay">
+                            <span className="pill">Em reprodução</span>
+                            <span className="pill">{activeLesson?.duration || '5 min'}</span>
+                        </div>
                         {activeLesson?.video_url ? (
                             <iframe
-                                width="100%"
-                                height="100%"
                                 src={
                                     activeLesson.video_url.includes('vimeo')
                                         ? `https://player.vimeo.com/video/${activeLesson.video_url.split('/').pop().split('?')[0]}`
@@ -141,44 +137,50 @@ const CoursePlayer = () => {
                                 allowFullScreen
                             ></iframe>
                         ) : (
-                            <div className="flex-center" style={{ height: '100%', flexDirection: 'column', background: 'var(--bg-input)' }}>
-                                <PlayCircle size={48} style={{ opacity: 0.5, marginBottom: '1rem' }} />
+                            <div className="player-placeholder">
+                                <PlayCircle size={48} style={{ opacity: 0.6 }} />
                                 <p>Selecione uma aula para assistir</p>
                             </div>
                         )}
                     </div>
 
-                    <Card>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                            <h3 style={{ margin: 0 }}>Descrição da Aula</h3>
-                            <Button
-                                variant={completedLessons.includes(activeLessonId) ? 'outline' : 'primary'}
-                                onClick={handleMarkComplete}
-                            >
-                                {completedLessons.includes(activeLessonId) ? (
-                                    <><CheckCircle size={18} color="var(--success)" /> Concluída</>
-                                ) : (
-                                    <>Marcar como Concluída</>
-                                )}
-                            </Button>
-                        </div>
+                    <Card style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1.25rem', alignItems: 'flex-start' }}>
+                            <div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                                    <FileText size={18} style={{ color: 'var(--text-secondary)' }} />
+                                    <h3 style={{ margin: 0 }}>Sobre a aula</h3>
+                                </div>
+                                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                                    {course.description || 'Aproveite o modo cinema para assistir em tela cheia e use a lista ao lado para navegar entre as aulas.'}
+                                </p>
+                            </div>
 
-                        <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>
-                            {course.description}
-                        </p>
+                            <div style={{
+                                background: 'rgba(255,255,255,0.02)',
+                                border: '1px solid rgba(255,255,255,0.06)',
+                                borderRadius: '12px',
+                                padding: '1rem'
+                            }}>
+                                <p className="eyebrow">Próximo episódio</p>
+                                <h4 style={{ margin: '0.35rem 0' }}>{nextLesson?.title || 'Você está no último conteúdo'}</h4>
+                                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                                    {nextLesson ? 'Assista na sequência para manter o ritmo.' : 'Revise qualquer módulo na barra lateral.'}
+                                </p>
+                            </div>
+                        </div>
                     </Card>
                 </div>
 
-                {/* Lesson List Sidebar */}
-                <div className="course-list" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color)' }}>
-                        <h3 style={{ fontSize: '1.1rem' }}>Conteúdo do Curso</h3>
-                        <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                <div className="course-list">
+                    <div className="course-list__header">
+                        <h3 style={{ fontSize: '1.1rem' }}>Conteúdo do curso</h3>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
                             {flatLessons.length} aulas disponíveis
                         </p>
                     </div>
 
-                    <div style={{ overflowY: 'auto', flex: 1 }}>
+                    <div className="course-list__body">
                         <ModuleList
                             modules={modules}
                             allLessons={flatLessons}

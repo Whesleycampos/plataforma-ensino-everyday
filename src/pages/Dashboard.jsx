@@ -1,140 +1,253 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search } from 'lucide-react';
+import { Search, Flame, Sparkles, Clock, ChevronRight, Shield, Users, BookOpen, TrendingUp } from 'lucide-react';
 import CourseCard from '../components/CourseCard';
+import { Button } from '../components/ui/Button';
+import { supabase } from '../lib/supabase';
 import '../components/ui/Stars.css';
+import './Dashboard.css';
 import { courseCurriculum } from '../lib/courseContent';
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    // We use the static curriculum directly for the dashboard grid
     const modules = courseCurriculum;
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [stats, setStats] = useState({
+        totalUsers: 0,
+        activeUsers: 0,
+        totalModules: modules.length,
+        totalLessons: 0
+    });
 
-    // Main Banner Component
-    const EverydayBanner = () => (
-        <div style={{
-            width: '100%',
-            height: '60vh', // Larger vertical size
-            borderRadius: '0', // Full width usually implies no radius at edges
-            overflow: 'hidden',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
-            marginBottom: '0', // attach to next section or give spacing
-            position: 'relative',
-            zIndex: 1
-        }}>
-            <video
-                src="/capa-plataforma.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover' // Ensure it fills the area
-                }}
-            />
-        </div>
-    );
+    const continueWatching = modules.slice(0, 5);
+    const collections = modules.slice(5, 11);
+    const heroLessons = modules[0]?.lessons?.length ?? 0;
+
+    useEffect(() => {
+        checkAdminStatus();
+        calculateStats();
+    }, []);
+
+    const checkAdminStatus = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user && user.email === 'whesleycampos@hotmail.com') {
+            setIsAdmin(true);
+        }
+    };
+
+    const calculateStats = () => {
+        const totalLessons = modules.reduce((acc, module) => acc + module.lessons.length, 0);
+        setStats(prev => ({ ...prev, totalLessons }));
+
+        // Buscar estatísticas reais do banco
+        fetchUserStats();
+    };
+
+    const fetchUserStats = async () => {
+        try {
+            // Total de usuários
+            const { count: totalUsers } = await supabase
+                .from('profiles')
+                .select('*', { count: 'exact', head: true });
+
+            // Usuários ativos (com progresso nos últimos 7 dias)
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+            const { count: activeUsers } = await supabase
+                .from('student_progress')
+                .select('user_id', { count: 'exact', head: true })
+                .gte('completed_at', sevenDaysAgo.toISOString());
+
+            setStats(prev => ({
+                ...prev,
+                totalUsers: totalUsers || 0,
+                activeUsers: activeUsers || 0
+            }));
+        } catch (error) {
+            console.error('Erro ao buscar estatísticas:', error);
+        }
+    };
 
     return (
-        <div style={{ minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
-            {/* Stars Background Layer */}
+        <div className="dashboard-shell">
             <div className="stars" />
+            <div className="dashboard-glow" />
 
-            {/* Top Navigation Bar */}
-            <nav style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                padding: '1.5rem 2rem',
-                alignItems: 'center',
-                zIndex: 10,
-                position: 'relative'
-            }}>
-                <button
-                    onClick={() => navigate(-1)}
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        color: 'var(--text-secondary)',
-                        background: 'transparent',
-                        border: 'none',
-                        cursor: 'pointer',
-                        transition: 'color 0.2s'
-                    }}
-                >
-                    <span>← Voltar para a escola</span>
-                </button>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <Search style={{ color: 'var(--text-secondary)', cursor: 'pointer' }} size={20} />
-                    <div style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '50%',
-                        border: '1px solid var(--border-color)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '0.75rem',
-                        color: 'var(--text-secondary)'
-                    }}>
-                        37%
+            <header className="topbar">
+                <div className="brand">
+                    <div className="brand-mark">+</div>
+                    <div>
+                        <span className="brand-title">Everyday</span>
+                        <span className="brand-sub">Streaming Class</span>
                     </div>
                 </div>
-            </nav>
 
-            {/* Hero / Brand Section - Full Width */}
-            <EverydayBanner />
+                <div className="topbar-search">
+                    <Search size={18} style={{ color: 'var(--text-secondary)' }} />
+                    <input placeholder="Buscar aulas, temas ou professores" />
+                </div>
 
-            <main style={{
-                maxWidth: '1200px',
-                margin: '0 auto',
-                padding: '2rem',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center'
-            }}>
+                <div className="topbar-actions">
+                    <button className="pill" onClick={() => navigate('/dashboard')}>Explorar</button>
+                    <button className="pill" onClick={() => navigate('/course/1', { state: { moduleIndex: 0 } })}>Continuar</button>
+                </div>
+            </header>
 
+            <section className="hero">
+                <div className="hero__media">
+                    <video
+                        src="/capa-plataforma.mp4"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                    />
+                    <div className="hero__overlay" />
+                </div>
 
-                {/* Module Grid */}
-                <section style={{ width: '100%' }}>
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-                        gap: '2rem',
-                        paddingBottom: '4rem'
-                    }}>
-                        {modules.map((module, index) => {
-                            // Use specific poster for all modules as requested
-                            let coverImage = "/poster-week-1.jpg";
-                            let title = module.title;
-                            let subTitle = `${module.lessons.length} Aulas`;
+                <div className="hero__content">
+                    <span className="pill">Original Everyday · Intensivo</span>
+                    <h1>Inglês com ritmo de streaming</h1>
+                    <p>
+                        Uma experiência premium de aprendizado contínuo: interface de streaming, lançamentos semanais e aulas rápidas para maratonar como se fosse sua série favorita.
+                    </p>
+                    <div className="hero__meta">
+                        <span className="pill">Nova aula toda semana</span>
+                        <span className="pill">{modules.length} módulos</span>
+                        <span className="pill">{heroLessons}+ aulas iniciais</span>
+                    </div>
+                    <div className="hero__actions">
+                        <Button onClick={() => navigate('/course/1', { state: { moduleIndex: 0 } })}>
+                            Assistir agora
+                        </Button>
+                        <Button variant="outline" onClick={() => navigate('/dashboard')}>
+                            Minha biblioteca
+                        </Button>
+                    </div>
+                </div>
 
-                            // Special formatting for "Semana X" to match "Materiais da Xª Semana"
-                            if (module.title.toLowerCase().includes('semana')) {
-                                const weekNum = module.title.replace(/\D/g, '');
-                                title = `Materiais da ${weekNum}ª Semana`;
-                                subTitle = "Everyday Conversation";
-                            }
+                <div className="hero__card">
+                    <div className="eyebrow">Sua maratona</div>
+                    <h3>Continue de onde parou</h3>
+                    <p className="shelf__subtitle">
+                        Everyday Conversation em formato de temporada. Retorme o episódio em andamento ou descubra o próximo drop.
+                    </p>
+                    <div className="hero__progress">
+                        <div className="hero__progress-bar">
+                            <span />
+                        </div>
+                        <span className="pill" style={{ background: 'rgba(94, 231, 255, 0.1)' }}>37% concluído</span>
+                    </div>
+                    <div className="hero__chips">
+                        <span className="pill"><Clock size={14} /> 12h assistidas</span>
+                        <span className="pill"><Flame size={14} /> Streak ativo</span>
+                        <span className="pill"><Sparkles size={14} /> Playlists exclusivas</span>
+                    </div>
+                </div>
+            </section>
 
-                            return (
-                                <CourseCard
-                                    key={index}
-                                    title={title}
-                                    label={subTitle}
-                                    description=""
-                                    progress={0}
-                                    image={coverImage}
-                                    // Navigate to the course player, passing the module index state effectively
-                                    // We link to the same course ID, but pass the specific module index
-                                    onClick={() => navigate(`/course/1`, { state: { moduleIndex: index } })}
-                                />
-                            );
-                        })}
+            <section className="shelf">
+                <div className="shelf__header">
+                    <div>
+                        <p className="eyebrow">Continuar assistindo</p>
+                        <h2 className="shelf__title">Retome sua trilha</h2>
+                        <p className="shelf__subtitle">Escolha o módulo que você parou e continue assistindo sem perder o ritmo.</p>
+                    </div>
+                    <Button variant="outline" onClick={() => navigate('/course/1')}>
+                        Ver todos <ChevronRight size={16} />
+                    </Button>
+                </div>
+
+                <div className="shelf__rail">
+                    {continueWatching.map((module, index) => (
+                        <CourseCard
+                            key={module.title}
+                            title={module.title}
+                            label={`${module.lessons.length} aulas`}
+                            description={module.lessons[0]}
+                            progress={Math.min(95, 25 + (index * 12))}
+                            image="/poster-week-1.jpg"
+                            onClick={() => navigate('/course/1', { state: { moduleIndex: index } })}
+                        />
+                    ))}
+                </div>
+            </section>
+
+            <section className="shelf">
+                <div className="shelf__header">
+                    <div>
+                        <p className="eyebrow">Coleção completa</p>
+                        <h2 className="shelf__title">Trilhas semanais</h2>
+                        <p className="shelf__subtitle">Maratone as temporadas em ordem ou pule direto para o tema que você quer dominar.</p>
+                    </div>
+                </div>
+
+                <div className="shelf__grid">
+                    {collections.map((module, index) => (
+                        <CourseCard
+                            key={module.title}
+                            title={module.title}
+                            label="Coleção Everyday"
+                            description={module.lessons[1] || 'Playlist com aulas e quizzes.'}
+                            progress={Math.min(80, 10 + (index * 9))}
+                            image="/poster-week-1.jpg"
+                            onClick={() => navigate('/course/1', { state: { moduleIndex: index + 5 } })}
+                        />
+                    ))}
+                </div>
+            </section>
+
+            {isAdmin && (
+                <section className="admin-section">
+                    <div className="eyebrow">Acesso Restrito</div>
+                    <h2>
+                        <Shield size={28} />
+                        Painel de Administrador
+                    </h2>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
+                        Estatísticas e métricas da plataforma Everyday Conversation
+                    </p>
+
+                    <div className="admin-grid">
+                        <div className="admin-stat">
+                            <h3>Total de Alunos</h3>
+                            <p>{stats.totalUsers}</p>
+                            <small>
+                                <Users size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
+                                Usuários cadastrados
+                            </small>
+                        </div>
+
+                        <div className="admin-stat">
+                            <h3>Alunos Ativos</h3>
+                            <p>{stats.activeUsers}</p>
+                            <small>
+                                <TrendingUp size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
+                                Últimos 7 dias
+                            </small>
+                        </div>
+
+                        <div className="admin-stat">
+                            <h3>Módulos Disponíveis</h3>
+                            <p>{stats.totalModules}</p>
+                            <small>
+                                <BookOpen size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
+                                Semanas de conteúdo
+                            </small>
+                        </div>
+
+                        <div className="admin-stat">
+                            <h3>Total de Aulas</h3>
+                            <p>{stats.totalLessons}</p>
+                            <small>
+                                <Sparkles size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
+                                Vídeos + Quizzes
+                            </small>
+                        </div>
                     </div>
                 </section>
-            </main>
+            )}
         </div>
     );
 };
