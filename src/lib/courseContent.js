@@ -40,10 +40,6 @@ export const courseCurriculum = [
                 title: "Aprendendo Inglês com música - Three Little Birds",
                 duration: "21 min",
                 video_url: "https://iframe.mediadelivery.net/embed/588018/5ec7f3e3-773b-4f46-8423-7c5da31a67c4?autoplay=false"
-            },
-            {
-                title: "Quiz (Teste) de todos os conteúdos da semana 1",
-                duration: "5 min"
             }
         ]
     },
@@ -88,10 +84,6 @@ export const courseCurriculum = [
             {
                 title: "Música 2 - My Heart Will Go On",
                 duration: "5 min"
-            },
-            {
-                title: "Quiz (Teste) de todos os conteúdos da semana 2",
-                duration: "5 min"
             }
         ]
     },
@@ -123,10 +115,6 @@ export const courseCurriculum = [
             },
             {
                 title: "Música 3 - \"You're Beautiful\" - James Blunt",
-                duration: "5 min"
-            },
-            {
-                title: "Quiz (Teste) de todos os conteúdos da semana 3",
                 duration: "5 min"
             }
         ]
@@ -169,10 +157,6 @@ export const courseCurriculum = [
             },
             {
                 title: "Música 4 - Stand By Me",
-                duration: "5 min"
-            },
-            {
-                title: "Quiz (Teste) de todos os conteúdos da semana 4",
                 duration: "5 min"
             }
         ]
