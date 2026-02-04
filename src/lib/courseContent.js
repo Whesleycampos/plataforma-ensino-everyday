@@ -16,7 +16,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 1.2 - Past of the verb to be",
                 duration: "15 min",
-                video_url: "https://iframe.mediadelivery.net/embed/588018/66066bdb-31f7-4fb8-a61b-cd589a9f58de?autoplay=false"
+                video_url: "https://iframe.mediadelivery.net/embed/588018/6b8479d6-6b3c-4c20-b158-b22532afa9cf?autoplay=false"
             },
             {
                 title: "Aula 2 - Have \\Has\\Had\\There is\\There are",
