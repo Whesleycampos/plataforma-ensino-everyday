@@ -1,1 +1,4 @@
-/* Cleared for new module styles */
+/* Global Imports */
+@import './styles/animations.css';
+
+/* App-level styles can go here */

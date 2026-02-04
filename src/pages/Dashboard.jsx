@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Flame, Sparkles, Clock, ChevronRight, Shield, Users, BookOpen, TrendingUp } from 'lucide-react';
+import { Search, Flame, Sparkles, Clock, ChevronRight, Shield, Users, BookOpen, TrendingUp, Sun, Moon, Menu } from 'lucide-react';
 import CourseCard from '../components/CourseCard';
+import Sidebar from '../components/Sidebar';
 import { Button } from '../components/ui/Button';
 import { supabase } from '../lib/supabase';
+import { useTheme } from '../contexts/ThemeContext';
 import '../components/ui/Stars.css';
 import './Dashboard.css';
 import { courseCurriculum } from '../lib/courseContent';
@@ -11,7 +13,9 @@ import { courseCurriculum } from '../lib/courseContent';
 const Dashboard = () => {
     const navigate = useNavigate();
     const modules = courseCurriculum;
+    const { theme, toggleTheme } = useTheme();
     const [isAdmin, setIsAdmin] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [stats, setStats] = useState({
         totalUsers: 0,
         activeUsers: 0,
@@ -19,9 +23,8 @@ const Dashboard = () => {
         totalLessons: 0
     });
 
-    const continueWatching = modules.slice(0, 5);
-    const collections = modules.slice(5, 11);
     const heroLessons = modules[0]?.lessons?.length ?? 0;
+    const totalLessonsCount = modules.reduce((acc, m) => acc + m.lessons.length, 0);
 
     useEffect(() => {
         checkAdminStatus();
@@ -70,14 +73,30 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="dashboard-shell">
+        <div className="dashboard-shell" id="main-content" role="main">
             <div className="stars" />
             <div className="dashboard-glow" />
 
+            {/* Mobile Sidebar */}
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
             <header className="topbar">
-                <div className="brand">
-                    <div className="brand-mark">+</div>
-                    <div>
+                {/* Hamburger Menu Button - visible on tablet/mobile */}
+                <button
+                    className="hamburger-btn"
+                    onClick={() => setSidebarOpen(true)}
+                    aria-label="Abrir menu"
+                >
+                    <Menu size={24} />
+                </button>
+
+                <div className="brand" onClick={() => navigate('/dashboard')} style={{ cursor: 'pointer' }}>
+                    <img
+                        src="/logo-curso.png"
+                        alt="Everyday Conversation"
+                        className="brand-logo"
+                    />
+                    <div className="brand-text">
                         <span className="brand-title">Everyday</span>
                         <span className="brand-sub">Streaming Class</span>
                     </div>
@@ -89,6 +108,17 @@ const Dashboard = () => {
                 </div>
 
                 <div className="topbar-actions">
+                    <button
+                        onClick={toggleTheme}
+                        className="theme-toggle-btn"
+                        aria-label={theme === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'}
+                    >
+                        {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                        <span className="hide-mobile">
+                            {theme === 'dark' ? 'Tema Claro' : 'Tema Escuro'}
+                        </span>
+                    </button>
+                    <div className="divider" style={{ width: '1px', height: '24px', margin: '0 0.5rem', background: 'var(--border-color)' }} />
                     <button className="pill" onClick={() => navigate('/dashboard')}>Explorar</button>
                     <button className="pill" onClick={() => navigate('/course/1', { state: { moduleIndex: 0 } })}>Continuar</button>
                 </div>
@@ -108,7 +138,7 @@ const Dashboard = () => {
 
                 <div className="hero__content">
                     <span className="pill">Original Everyday · Intensivo</span>
-                    <h1>Inglês com ritmo de streaming</h1>
+                    <h1 className="text-gradient-animated">Inglês com ritmo de streaming</h1>
                     <p>
                         Uma experiência premium de aprendizado contínuo: interface de streaming, lançamentos semanais e aulas rápidas para maratonar como se fosse sua série favorita.
                     </p>
@@ -150,49 +180,24 @@ const Dashboard = () => {
             <section className="shelf">
                 <div className="shelf__header">
                     <div>
-                        <p className="eyebrow">Continuar assistindo</p>
-                        <h2 className="shelf__title">Retome sua trilha</h2>
-                        <p className="shelf__subtitle">Escolha o módulo que você parou e continue assistindo sem perder o ritmo.</p>
-                    </div>
-                    <Button variant="outline" onClick={() => navigate('/course/1')}>
-                        Ver todos <ChevronRight size={16} />
-                    </Button>
-                </div>
-
-                <div className="shelf__rail">
-                    {continueWatching.map((module, index) => (
-                        <CourseCard
-                            key={module.title}
-                            title={module.title}
-                            label={`${module.lessons.length} aulas`}
-                            description={module.lessons[0]}
-                            progress={Math.min(95, 25 + (index * 12))}
-                            image="/poster-week-1.jpg"
-                            onClick={() => navigate('/course/1', { state: { moduleIndex: index } })}
-                        />
-                    ))}
-                </div>
-            </section>
-
-            <section className="shelf">
-                <div className="shelf__header">
-                    <div>
-                        <p className="eyebrow">Coleção completa</p>
-                        <h2 className="shelf__title">Trilhas semanais</h2>
-                        <p className="shelf__subtitle">Maratone as temporadas em ordem ou pule direto para o tema que você quer dominar.</p>
+                        <p className="eyebrow">Curso Completo</p>
+                        <h2 className="shelf__title">Todas as 20 Semanas</h2>
+                        <p className="shelf__subtitle">
+                            {modules.length} semanas · {totalLessonsCount} aulas · Maratone em ordem ou escolha o tema que quer dominar.
+                        </p>
                     </div>
                 </div>
 
                 <div className="shelf__grid">
-                    {collections.map((module, index) => (
+                    {modules.map((module, index) => (
                         <CourseCard
                             key={module.title}
                             title={module.title}
-                            label="Coleção Everyday"
-                            description={module.lessons[1] || 'Playlist com aulas e quizzes.'}
-                            progress={Math.min(80, 10 + (index * 9))}
+                            label={`${module.lessons.length} aulas`}
+                            lessons={module.lessons}
+                            progress={Math.max(5, Math.min(95, 10 + (index * 4.5)))}
                             image="/poster-week-1.jpg"
-                            onClick={() => navigate('/course/1', { state: { moduleIndex: index + 5 } })}
+                            onClick={() => navigate('/course/1', { state: { moduleIndex: index } })}
                         />
                     ))}
                 </div>

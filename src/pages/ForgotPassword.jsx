@@ -65,11 +65,13 @@ const ForgotPassword = () => {
                 {/* Glass Card */}
                 <div className="glass-panel" style={{
                     width: '100%',
-                    padding: '2.5rem',
-                    background: 'rgba(30, 41, 59, 0.6)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+                    padding: '2.75rem',
+                    background: 'rgba(20, 20, 20, 0.75)',
+                    backdropFilter: 'blur(24px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    boxShadow: '0 30px 60px -12px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 212, 255, 0.12)',
+                    transition: 'all 0.3s ease'
                 }}>
                     {success ? (
                         <div style={{ textAlign: 'center' }}>
@@ -117,10 +119,11 @@ const ForgotPassword = () => {
                                         style={{
                                             paddingLeft: '3rem',
                                             paddingRight: '1rem',
-                                            height: '50px',
+                                            height: '52px',
                                             fontSize: '1rem',
-                                            background: 'rgba(15, 23, 42, 0.6)',
-                                            borderColor: 'rgba(255,255,255,0.05)'
+                                            background: 'rgba(34, 34, 34, 0.8)',
+                                            borderColor: 'rgba(255,255,255,0.08)',
+                                            transition: 'all 0.25s ease'
                                         }}
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
@@ -141,11 +144,14 @@ const ForgotPassword = () => {
                                 <Button
                                     type="submit"
                                     style={{
-                                        height: '50px',
+                                        height: '52px',
                                         fontSize: '1rem',
+                                        fontWeight: 600,
                                         marginTop: '0.5rem',
-                                        background: 'linear-gradient(to right, #8b5cf6, #ec4899)',
-                                        border: 'none'
+                                        background: 'linear-gradient(135deg, #00d4ff 0%, #0ea5e9 50%, #8b5cf6 100%)',
+                                        border: 'none',
+                                        boxShadow: '0 12px 40px rgba(0, 212, 255, 0.3), 0 0 20px rgba(139, 92, 246, 0.2)',
+                                        transition: 'all 0.3s ease'
                                     }}
                                     disabled={loading}
                                 >

@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(npx netlify:*)",
+      "Bash(netlify deploy:*)",
+      "WebFetch(domain:everydayconversationexeplopassadotobe.netlify.app)",
+      "WebFetch(domain:everydayconversationhave.netlify.app)",
+      "WebFetch(domain:everydayconversationfamilymembersexem.netlify.app)",
+      "Bash(curl:*)",
+      "Bash(powershell -Command \"try { $response = Invoke-RestMethod -Uri ''https://video.bunnycdn.com/library/588018/videos?page=1&itemsPerPage=5&orderBy=title'' -Headers @{''AccessKey''=''227a23f9-98db-4156-a60d-cea027d8667db48d790b-eb3e-4792-9d33-33d4d8974558''} -Method Get; $response | ConvertTo-Json -Depth 5 } catch { Write-Host $_Exception.Message }\")",
+      "Bash(powershell -Command \"$r = Invoke-RestMethod -Uri ''https://video.bunnycdn.com/library/588018/videos?page=1&itemsPerPage=5&orderBy=title'' -Headers @{''AccessKey''=''227a23f9-98db-4156-a60d-cea027d8667db48d790b-eb3e-4792-9d33-33d4d8974558''} -Method Get; $r | ConvertTo-Json -Depth 5\")",
+      "Bash(powershell -Command \"$r = Invoke-RestMethod -Uri ''https://video.bunnycdn.com/library/588018/videos?page=1&itemsPerPage=5&orderBy=title'' -Headers @{''AccessKey''=''227a23f9-98db-4156-a60d-cea027d8667db48d790b-eb3e-4792-9d33-33d4d8974558''} -Method Get; ConvertTo-Json -InputObject $r -Depth 5\")",
+      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -File - <<'PSEOF'\n$r = Invoke-RestMethod -Uri \"https://video.bunnycdn.com/library/588018/videos?page=1&itemsPerPage=5&orderBy=title\" -Headers @{AccessKey=\"227a23f9-98db-4156-a60d-cea027d8667db48d790b-eb3e-4792-9d33-33d4d8974558\"} -Method Get\nConvertTo-Json -InputObject $r -Depth 5\nPSEOF)",
+      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -Command \"Invoke-RestMethod -Uri ''https://video.bunnycdn.com/library/588018/videos?page=1&itemsPerPage=5&orderBy=title'' -Headers @{AccessKey=''1acd04c6-108e-4574-811729a4061a-4b54-4020''} -Method Get | ConvertTo-Json -Depth 5\")",
+      "Bash(powershell -NoProfile -ExecutionPolicy Bypass -Command \"Invoke-RestMethod -Uri ''https://video.bunnycdn.com/library/588018/videos?page=1&itemsPerPage=100&orderBy=title'' -Headers @{AccessKey=''1acd04c6-108e-4574-811729a4061a-4b54-4020''} -Method Get | ConvertTo-Json -Depth 3 -Compress\")",
+      "Bash(powershell -NoProfile -Command \"Invoke-RestMethod -Uri ''https://cxpcqspccnafqgflrwvr.supabase.co/rest/v1/courses?select=*'' -Headers @{apikey=''sb_publishable_dhHlnEf87JCiZJhonajJ6A_JbXtK6rz''; Authorization=''Bearer sb_publishable_dhHlnEf87JCiZJhonajJ6A_JbXtK6rz''} -Method Get | ConvertTo-Json -Depth 3\")",
+      "Bash(powershell -NoProfile -Command \"Invoke-RestMethod -Uri ''https://cxpcqspccnafqgflrwvr.supabase.co/rest/v1/lessons?select=id,title,video_url,position,course_id&order=position.asc'' -Headers @{apikey=''sb_publishable_dhHlnEf87JCiZJhonajJ6A_JbXtK6rz''; Authorization=''Bearer sb_publishable_dhHlnEf87JCiZJhonajJ6A_JbXtK6rz''} -Method Get | ConvertTo-Json -Depth 3\")",
+      "Bash(powershell:*)",
+      "Bash(npm run dev:*)",
+      "Bash(timeout 8 bash -c 'cd \"\"c:\\\\Users\\\\whesl\\\\OneDrive\\\\Documentos\\\\Projetos\\\\_Projetos_Ativos\\\\Plataforma de Ensino Everyday\"\" && npx vite --host 2>&1')",
+      "Bash(start http://localhost:5174)",
+      "Bash(start msedge \"https://dashboard.kiwify.com.br\")",
+      "Bash(gh auth status:*)",
+      "Bash(gh auth login:*)",
+      "Bash(start msedge \"https://github.com/login/device\")",
+      "Bash(gh repo create:*)",
+      "Bash(gh api:*)",
+      "Bash(gh search:*)",
+      "Bash(gh repo edit:*)"
+    ]
+  }
+}

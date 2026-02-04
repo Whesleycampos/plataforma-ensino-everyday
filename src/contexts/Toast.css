@@ -1,0 +1,182 @@
+/* ============================================
+   TOAST NOTIFICATION STYLES
+   ============================================ */
+
+.toast-container {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 400px;
+    width: calc(100% - 3rem);
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: rgba(20, 20, 20, 0.95);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 0, 0, 0.3);
+    pointer-events: auto;
+    animation: toast-slide-in 0.3s var(--spring-smooth);
+}
+
+@keyframes toast-slide-in {
+    from {
+        opacity: 0;
+        transform: translateX(100%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+/* Toast Types */
+.toast--success {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(20, 20, 20, 0.95));
+}
+
+.toast--success .toast__icon {
+    color: var(--success);
+}
+
+.toast--error {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(20, 20, 20, 0.95));
+}
+
+.toast--error .toast__icon {
+    color: var(--error);
+}
+
+.toast--warning {
+    border-color: rgba(245, 158, 11, 0.4);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(20, 20, 20, 0.95));
+}
+
+.toast--warning .toast__icon {
+    color: var(--warning);
+}
+
+.toast--info {
+    border-color: rgba(59, 130, 246, 0.4);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(20, 20, 20, 0.95));
+}
+
+.toast--info .toast__icon {
+    color: var(--info);
+}
+
+/* Toast Icon */
+.toast__icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+/* Toast Content */
+.toast__content {
+    flex: 1;
+    min-width: 0;
+}
+
+.toast__message {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.toast__action {
+    margin-top: 0.5rem;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.toast__action:hover {
+    opacity: 0.8;
+}
+
+/* Toast Close Button */
+.toast__close {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.toast__close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+/* Light Mode */
+:root[data-theme="light"] .toast {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-lg);
+}
+
+:root[data-theme="light"] .toast--success {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(255, 255, 255, 0.95));
+}
+
+:root[data-theme="light"] .toast--error {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(255, 255, 255, 0.95));
+}
+
+:root[data-theme="light"] .toast--warning {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(255, 255, 255, 0.95));
+}
+
+:root[data-theme="light"] .toast--info {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(255, 255, 255, 0.95));
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    .toast-container {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+        width: auto;
+        max-width: none;
+    }
+
+    .toast {
+        padding: 0.875rem 1rem;
+    }
+
+    .toast__message {
+        font-size: 0.85rem;
+    }
+}

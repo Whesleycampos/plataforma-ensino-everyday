@@ -1,0 +1,26 @@
+/* ============================================
+   SKIP LINK - ACCESSIBILITY
+   ============================================ */
+
+.skip-link {
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    padding: 1rem 2rem;
+    background: var(--gradient-primary);
+    color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg), var(--glow-primary);
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 1rem;
+    outline: 2px solid white;
+    outline-offset: 2px;
+}

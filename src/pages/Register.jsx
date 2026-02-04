@@ -36,16 +36,46 @@ const Register = () => {
             setError(error.message);
             setLoading(false);
         } else {
+            // Fallback: Ensure profile exists (in case trigger is missing)
+            if (data?.user) {
+                const { error: profileError } = await supabase
+                    .from('profiles')
+                    .insert([
+                        {
+                            id: data.user.id,
+                            full_name: formData.name,
+                            email: formData.email
+                        }
+                    ]);
+
+                // Ignore duplicate error (code 23505) if trigger already created it
+                if (profileError && profileError.code !== '23505') {
+                    console.error('Error creating profile:', profileError);
+                }
+            }
+
             // Login successful, redirect to dashboard
             navigate('/dashboard');
         }
     };
 
     return (
-        <div className="flex-center" style={{ minHeight: '100vh', padding: '1rem' }}>
-            <Card style={{ maxWidth: '400px', width: '100%' }}>
+        <div className="flex-center" style={{ minHeight: '100vh', padding: '1rem', position: 'relative', overflow: 'hidden' }}>
+            <div className="stars" />
+            <Card style={{
+                maxWidth: '420px',
+                width: '100%',
+                padding: '2.75rem',
+                background: 'rgba(20, 20, 20, 0.75)',
+                backdropFilter: 'blur(24px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                boxShadow: '0 30px 60px -12px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 212, 255, 0.12)',
+                transition: 'all 0.3s ease',
+                zIndex: 10
+            }}>
                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                    <h1 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Junte-se a nós</h1>
+                    <h1 className="text-gradient-animated" style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Junte-se a nós</h1>
                     <p style={{ color: 'var(--text-secondary)' }}>Crie sua conta para acessar os cursos.</p>
                 </div>
 
@@ -91,7 +121,16 @@ const Register = () => {
 
                     {error && <p style={{ color: 'var(--error)', fontSize: '0.9rem', textAlign: 'center' }}>{error}</p>}
 
-                    <Button type="submit" style={{ marginTop: '0.5rem' }} disabled={loading}>
+                    <Button type="submit" style={{
+                        marginTop: '0.5rem',
+                        height: '52px',
+                        fontSize: '1rem',
+                        fontWeight: 600,
+                        background: 'linear-gradient(135deg, #00d4ff 0%, #0ea5e9 50%, #8b5cf6 100%)',
+                        border: 'none',
+                        boxShadow: '0 12px 40px rgba(0, 212, 255, 0.3), 0 0 20px rgba(139, 92, 246, 0.2)',
+                        transition: 'all 0.3s ease'
+                    }} disabled={loading}>
                         {loading ? 'Criando conta...' : <>Criar Conta <ArrowRight size={18} /></>}
                     </Button>
                 </form>

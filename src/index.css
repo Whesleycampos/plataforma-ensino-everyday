@@ -79,10 +79,131 @@
   --spring-smooth: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+:root[data-theme="light"] {
+  /* Light Mode Palette */
+  --bg-dark: #ffffff;
+  --bg-main: #f9fafb;
+  /* gray-50 */
+  --bg-card: #ffffff;
+  --bg-panel: #f3f4f6;
+  /* gray-100 */
+  --bg-input: #f3f4f6;
+  --bg-hover: #e5e7eb;
+  /* gray-200 */
+
+  --text-primary: #111827;
+  /* gray-900 */
+  --text-secondary: #4b5563;
+  /* gray-600 */
+  --text-muted: #9ca3af;
+  /* gray-400 */
+  --text-disabled: #d1d5db;
+  /* gray-300 */
+
+  --border-color: #e5e7eb;
+  /* gray-200 */
+  --border-subtle: #f3f4f6;
+  /* gray-100 */
+  --border-strong: #d1d5db;
+  /* gray-300 */
+
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: 1px solid rgba(229, 231, 235, 0.5);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  /* Update gradients for light mode */
+  --gradient-dark: linear-gradient(145deg, #ffffff, #f3f4f6);
+  --gradient-surface: linear-gradient(135deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.01));
+  --gradient-overlay: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.95) 100%);
+}
+
+/* Light mode body background override */
+[data-theme="light"] body {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  background: #ffffff !important;
+}
+
+/* Light mode - Sidebar */
+[data-theme="light"] .sidebar {
+  background: #ffffff !important;
+  border-right: 1px solid #e5e7eb !important;
+}
+
+[data-theme="light"] .sidebar-item {
+  color: #374151 !important;
+}
+
+[data-theme="light"] .sidebar-item:hover {
+  background: #f3f4f6 !important;
+}
+
+[data-theme="light"] .sidebar-item.active {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(139, 92, 246, 0.1)) !important;
+  color: #0ea5e9 !important;
+}
+
+/* Light mode - Stars background hide */
+[data-theme="light"] .stars {
+  display: none !important;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Focus Visible - Better focus styles for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Remove default focus for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: rgba(255, 255, 255, 0.3);
+    --border-subtle: rgba(255, 255, 255, 0.2);
+  }
 }
 
 body {
@@ -100,6 +221,8 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
+  /* Smooth theme transition */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1,
@@ -202,6 +325,96 @@ button {
   transform: translateY(0);
 }
 
+/* Ghost Button */
+.btn-ghost {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  box-shadow: none;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+/* Button Loading State */
+.btn--loading {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.btn--loading:hover {
+  transform: none;
+  filter: none;
+}
+
+.btn__spinner {
+  animation: spin 1s linear infinite;
+}
+
+.btn__text--loading {
+  opacity: 0.9;
+}
+
+/* Button Disabled State */
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn:disabled:hover {
+  transform: none;
+  filter: none;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+}
+
+.theme-toggle-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.theme-toggle-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle-btn:hover svg {
+  transform: rotate(20deg) scale(1.1);
+}
+
 .input-field {
   width: 100%;
   padding: 0.875rem 1.125rem;
@@ -289,4 +502,408 @@ button {
 ::selection {
   background: rgba(94, 231, 255, 0.18);
   color: white;
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES
+   ============================================ */
+
+/* Hamburger Menu Button */
+.hamburger-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+}
+
+.hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--border-strong);
+}
+
+.hamburger-btn:active {
+  transform: scale(0.95);
+}
+
+/* Sidebar Overlay (Mobile) */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 40;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.sidebar-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Mobile Visibility Utilities */
+.hide-mobile {
+  display: block;
+}
+
+.show-mobile {
+  display: none !important;
+}
+
+.hide-tablet {
+  display: block;
+}
+
+/* Touch-friendly minimum sizes */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Responsive Typography */
+.responsive-title {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  line-height: 1.2;
+}
+
+.responsive-subtitle {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+}
+
+/* ============================================
+   TABLET BREAKPOINT (max-width: 1024px)
+   ============================================ */
+@media (max-width: 1024px) {
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .hide-tablet {
+    display: none !important;
+  }
+
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+/* ============================================
+   MOBILE BREAKPOINT (max-width: 768px)
+   ============================================ */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+
+  .show-mobile {
+    display: flex !important;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  /* Adjust button sizes for touch */
+  .btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .pill {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  /* Scrollbar thinner on mobile */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+}
+
+/* ============================================
+   SMALL MOBILE BREAKPOINT (max-width: 480px)
+   ============================================ */
+@media (max-width: 480px) {
+  body {
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.25rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .glass-panel {
+    border-radius: var(--radius-md);
+    padding: 1rem;
+  }
+
+  .eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+  }
+
+  /* Auth pages responsive */
+  .input-field {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+
+  /* Ensure inputs with icons have proper padding */
+  .input-field[style*="padding-left"] {
+    padding-left: 2.75rem !important;
+  }
+}
+
+/* ============================================
+   LANDSCAPE MOBILE
+   ============================================ */
+@media (max-height: 600px) and (orientation: landscape) {
+  .flex-center {
+    padding: 0.5rem !important;
+  }
+
+  .glass-panel {
+    padding: 1rem !important;
+  }
+}
+
+/* ============================================
+   PREMIUM VISUAL EFFECTS
+   ============================================ */
+
+/* Animated Background Gradient */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+body {
+  background-size: 200% 200%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+/* Gradient Text Animated */
+.text-gradient-animated {
+  background: linear-gradient(90deg, #00d4ff, #8b5cf6, #ec4899, #00d4ff);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-text 4s linear infinite;
+}
+
+@keyframes gradient-text {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+/* Enhanced Glow on Focus */
+.input-field:focus,
+.topbar-search:focus-within {
+  box-shadow:
+    0 0 0 3px rgba(0, 212, 255, 0.2),
+    0 0 20px rgba(0, 212, 255, 0.4),
+    0 0 40px rgba(0, 212, 255, 0.1) !important;
+}
+
+/* Pills with Glow on Hover */
+.pill:hover {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  border-color: rgba(0, 212, 255, 0.5);
+  color: var(--text-primary);
+}
+
+/* Progress Pulse Animation */
+@keyframes progress-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(94, 231, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(94, 231, 255, 0.8);
+  }
+}
+
+/* Button Gradient Animation */
+@keyframes btn-gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00d4ff, #0ea5e9, #8b5cf6, #00d4ff);
+  background-size: 300% 300%;
+  animation: btn-gradient 4s ease infinite;
+}
+
+/* Neon Border Glow Animation */
+@keyframes border-glow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+/* Rotate Light Effect */
+@keyframes rotate-light {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Float Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Glass Panel Premium Enhancement */
+.glass-panel {
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.5),
+    inset 0 0 80px rgba(0, 212, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================
+   LIGHT MODE COMPREHENSIVE OVERRIDES
+   ============================================ */
+
+/* Glass Panel */
+[data-theme="light"] .glass-panel {
+  background: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+/* Text Gradient */
+[data-theme="light"] .text-gradient-animated {
+  background: linear-gradient(90deg, #0ea5e9, #7c3aed, #db2777, #0ea5e9);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .text-gradient {
+  color: #111827 !important;
+  background: none !important;
+  -webkit-text-fill-color: #111827 !important;
+}
+
+/* Input fields */
+[data-theme="light"] .input-field,
+[data-theme="light"] input[type="email"],
+[data-theme="light"] input[type="password"],
+[data-theme="light"] input[type="text"],
+[data-theme="light"] textarea {
+  background: #f9fafb !important;
+  border: 1px solid #d1d5db !important;
+  color: #111827 !important;
+}
+
+[data-theme="light"] .input-field::placeholder,
+[data-theme="light"] input::placeholder {
+  color: #9ca3af !important;
+}
+
+[data-theme="light"] .input-field:focus,
+[data-theme="light"] input:focus {
+  border-color: #0ea5e9 !important;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2) !important;
+}
+
+/* Login/Register pages - flex-center container */
+[data-theme="light"] .flex-center {
+  background: #ffffff !important;
+}
+
+/* Hide stars in light mode */
+[data-theme="light"] .stars {
+  display: none !important;
+}
+
+/* Pills */
+[data-theme="light"] .pill {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+[data-theme="light"] .pill:hover {
+  background: #e5e7eb !important;
+  box-shadow: none !important;
+}
+
+/* Buttons */
+[data-theme="light"] .btn-outline {
+  background: transparent !important;
+  border: 1px solid #d1d5db !important;
+  color: #374151 !important;
+}
+
+[data-theme="light"] .btn-outline:hover {
+  background: #f3f4f6 !important;
+  border-color: #9ca3af !important;
+}
+
+/* General text colors */
+[data-theme="light"] p {
+  color: #4b5563;
+}
+
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4 {
+  color: #111827;
+}
+
+/* Links */
+[data-theme="light"] a {
+  color: #0ea5e9;
+}
+
+[data-theme="light"] a:hover {
+  color: #0284c7;
 }

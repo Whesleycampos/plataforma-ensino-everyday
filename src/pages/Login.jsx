@@ -53,8 +53,9 @@ const Login = () => {
                         borderRadius: '50%',
                         overflow: 'hidden',
                         margin: '0 auto 1rem auto',
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-                        border: '2px solid rgba(255,255,255,0.1)'
+                        boxShadow: '0 10px 40px rgba(0,0,0,0.5), 0 0 60px rgba(0, 212, 255, 0.15)',
+                        border: '2px solid rgba(0, 212, 255, 0.2)',
+                        animation: 'float 4s ease-in-out infinite'
                     }}>
                         <img
                             src="/logo-everyday-red.jpg"
@@ -76,7 +77,7 @@ const Login = () => {
                     transition: 'all 0.3s ease'
                 }}>
                     <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                        <h1 className="text-gradient" style={{ fontSize: '1.8rem', marginBottom: '0.5rem', fontWeight: 700, lineHeight: 1.2 }}>
+                        <h1 className="text-gradient-animated" style={{ fontSize: '1.8rem', marginBottom: '0.5rem', fontWeight: 700, lineHeight: 1.2 }}>
                             Curso de inglês<br />Everyday Conversation
                         </h1>
                         <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Bem-vindo de volta! Faça login para continuar.</p>

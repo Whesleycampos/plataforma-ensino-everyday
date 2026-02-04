@@ -1,0 +1,125 @@
+/* ============================================
+   EMPTY STATE STYLES
+   ============================================ */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    min-height: 300px;
+    animation: empty-state-fade-in 0.4s ease-out;
+}
+
+@keyframes empty-state-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.empty-state__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(139, 92, 246, 0.1));
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    color: var(--primary);
+    animation: empty-state-icon-pulse 3s ease-in-out infinite;
+}
+
+@keyframes empty-state-icon-pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px 5px rgba(0, 212, 255, 0.1);
+    }
+}
+
+.empty-state__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+}
+
+.empty-state__description {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    max-width: 400px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.empty-state__action {
+    margin-top: 1.5rem;
+}
+
+/* Smaller variant for inline use */
+.empty-state--small {
+    padding: 2rem 1.5rem;
+    min-height: 200px;
+}
+
+.empty-state--small .empty-state__icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+}
+
+.empty-state--small .empty-state__icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.empty-state--small .empty-state__title {
+    font-size: 1.1rem;
+}
+
+.empty-state--small .empty-state__description {
+    font-size: 0.9rem;
+}
+
+/* Light Mode */
+:root[data-theme="light"] .empty-state__icon {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(139, 92, 246, 0.08));
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .empty-state {
+        padding: 2rem 1rem;
+        min-height: 250px;
+    }
+
+    .empty-state__icon {
+        width: 64px;
+        height: 64px;
+    }
+
+    .empty-state__icon svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .empty-state__title {
+        font-size: 1.1rem;
+    }
+
+    .empty-state__description {
+        font-size: 0.9rem;
+    }
+}
