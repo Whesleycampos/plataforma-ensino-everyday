@@ -170,6 +170,14 @@ const CoursePlayer = () => {
 
     const activityLinks = getLessonActivityLinks();
 
+    // DEBUG: Log para investigar problema com activity_links
+    console.log('🔍 DEBUG CoursePlayer:', {
+        activeLesson: activeLesson?.title,
+        activityLinks: activityLinks,
+        activityLinksCount: activityLinks?.length || 0,
+        courseCurriculumModules: courseCurriculum.length
+    });
+
     if (loading) return (
         <div className="flex-center" style={{ height: '100vh', flexDirection: 'column', gap: '1rem' }}>
             <div className="spinner" style={{ width: '40px', height: '40px', border: '3px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
