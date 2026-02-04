@@ -34,31 +34,17 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 
-    <!-- Service Worker Registration -->
+    <!-- Service Worker Registration - DISABLED to prevent caching issues -->
+    <!-- Service worker was causing aggressive caching that prevented updates from being visible -->
+    <!-- Can be re-enabled in the future with proper cache-busting strategy -->
     <script>
+      // Unregister any existing service workers to clear cache
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-              console.log('[SW] Registered:', registration.scope);
-
-              // Check for updates
-              registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                newWorker.addEventListener('statechange', () => {
-                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    // New version available
-                    if (confirm('Nova versão disponível! Deseja atualizar?')) {
-                      newWorker.postMessage({ type: 'SKIP_WAITING' });
-                      window.location.reload();
-                    }
-                  }
-                });
-              });
-            })
-            .catch((error) => {
-              console.log('[SW] Registration failed:', error);
-            });
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for(let registration of registrations) {
+            registration.unregister();
+            console.log('[SW] Unregistered existing service worker');
+          }
         });
       }
     </script>
