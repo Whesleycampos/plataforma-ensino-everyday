@@ -5,7 +5,13 @@ export const courseCurriculum = [
             {
                 title: "Verbo To be",
                 duration: "19 min",
-                video_url: "https://player.mediadelivery.net/embed/588018/a56abdb1-c8f0-42e3-8c75-147ba1ad9029"
+                video_url: "https://player.mediadelivery.net/embed/588018/a56abdb1-c8f0-42e3-8c75-147ba1ad9029",
+                activity_links: [
+                    { title: "Exemplos Verbo To Be", url: "https://everydayconversationtobe.netlify.app/" },
+                    { title: "Quiz Verbo To Be", url: "https://everydayconversationquizverbotobe.netlify.app/" },
+                    { title: "Quiz Verbo To Be - Interrogativo", url: "https://everydayconversationquizverbotobeinte.netlify.app/" },
+                    { title: "Quiz Verbo To Be - Negativo", url: "https://everydayconversationquizverbotobenega.netlify.app/" }
+                ]
             },
             {
                 title: "Aula 1.2 - Past of the verb to be",
