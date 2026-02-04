@@ -1,5 +1,5 @@
 // Everyday Service Worker - Offline Support
-const CACHE_NAME = 'everyday-v1';
+const CACHE_NAME = 'everyday-v2';
 const OFFLINE_URL = '/offline.html';
 
 // Assets to cache immediately
