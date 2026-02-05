@@ -5,7 +5,7 @@ export const courseCurriculum = [
             {
                 title: "Verbo To be",
                 duration: "19 min",
-                video_url: "https://iframe.mediadelivery.net/embed/588018/a56abdb1-c8f0-42e3-8c75-147ba1ad9029?autoplay=false",
+                video_url: "https://vimeo.com/1162132500",
                 activity_links: [
                     { title: "Exemplos Verbo To Be", url: "https://everydayconversationtobe.netlify.app/" },
                     { title: "Quiz Verbo To Be", url: "https://everydayconversationquizverbotobe.netlify.app/" },
