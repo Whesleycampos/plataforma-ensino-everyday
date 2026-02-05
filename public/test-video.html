@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Vídeo - Diagnóstico Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0e1a;
+            color: #fff;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .info {
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 */
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .status {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 0.75rem;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+    </style>
+    <script src="https://player.vimeo.com/api/player.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Teste de Diagnóstico - Player de Vídeo</h1>
+
+        <div class="info">
+            <strong>Objetivo:</strong> Testar se o vídeo roda fluido sem React.<br>
+            <strong>Como testar:</strong> Acesse <code>https://everydayconversation.netlify.app/test-video.html</code> no celular
+        </div>
+
+        <h2 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Vídeo: Verbo To Be</h2>
+
+        <div class="video-wrapper">
+            <div id="vimeo-player"></div>
+        </div>
+
+        <div class="status">
+            <div id="status">Carregando player...</div>
+        </div>
+    </div>
+
+    <script>
+        // Detectar mobile
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        // Configurar player Vimeo
+        const player = new Vimeo.Player('vimeo-player', {
+            id: 1162132500, // Verbo To Be
+            width: '100%',
+            responsive: true,
+            controls: true,
+            autoplay: false,
+            quality: isMobile ? '540p' : 'auto'
+        });
+
+        const statusDiv = document.getElementById('status');
+
+        player.ready().then(() => {
+            statusDiv.innerHTML = '✅ Player carregado!<br>📱 Mobile: ' + (isMobile ? 'Sim' : 'Não') + '<br>🎬 Qualidade: ' + (isMobile ? '540p' : 'Auto');
+        });
+
+        player.on('error', (error) => {
+            statusDiv.innerHTML = '❌ Erro: ' + error.message;
+        });
+
+        player.on('play', () => {
+            statusDiv.innerHTML = '▶️ Reproduzindo...';
+        });
+
+        player.on('pause', () => {
+            statusDiv.innerHTML = '⏸️ Pausado';
+        });
+    </script>
+</body>
+</html>
