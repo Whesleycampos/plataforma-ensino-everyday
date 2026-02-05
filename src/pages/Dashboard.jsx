@@ -78,9 +78,20 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="dashboard-shell" id="main-content" role="main" data-mobile={isMobile}>
+        <div className="dashboard-shell" id="main-content" role="main" data-mobile={isMobile} style={isMobile ? {
+            animation: 'none',
+            transition: 'none'
+        } : {}}>
             {!isMobile && <div className="stars" />}
             {!isMobile && <div className="dashboard-glow" />}
+            {isMobile && <style>{`
+                /* Força otimizações mobile inline */
+                * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+                .text-gradient-animated { animation: none !important; }
+                .course-card:hover { transform: none !important; }
+                .course-card__overlay { backdrop-filter: none !important; background: rgba(0,0,0,0.5) !important; }
+                .pill { backdrop-filter: none !important; background: rgba(255,255,255,0.1) !important; }
+            `}</style>}
 
             {/* Mobile Sidebar */}
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
