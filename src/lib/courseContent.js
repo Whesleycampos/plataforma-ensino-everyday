@@ -16,7 +16,11 @@ export const courseCurriculum = [
             {
                 title: "Aula 1.2 - Past of the verb to be",
                 duration: "15 min",
-                video_url: "https://iframe.mediadelivery.net/embed/588018/6b8479d6-6b3c-4c20-b158-b22532afa9cf?autoplay=false"
+                video_url: "https://iframe.mediadelivery.net/embed/588018/6b8479d6-6b3c-4c20-b158-b22532afa9cf?autoplay=false",
+                activity_links: [
+                    { title: "Exemplos Past To Be", url: "https://everydayconversationexeplopassadotobe.netlify.app/" },
+                    { title: "Quiz Was/Were", url: "https://everydayconversationquizwaswere.netlify.app/" }
+                ]
             },
             {
                 title: "Aula 2 - Have \\Has\\Had\\There is\\There are",
@@ -49,6 +53,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 4 - Do, Does, Did - Curso Everyday Conversation",
                 duration: "5 min",
+                video_url: "https://vimeo.com/1162129967",
                 activity_links: [
                     { title: "Exemplos Do/Does/Did", url: "https://everydayconversationexemplosdodiddoes.netlify.app/" },
                     { title: "Quiz Do/Does/Did", url: "https://everydayconversationquizdodoesdid.netlify.app/" }
@@ -75,15 +80,16 @@ export const courseCurriculum = [
             {
                 title: "Quando usar Other e Another",
                 duration: "5 min",
+                video_url: "https://everydayconversationothervsanother.netlify.app/",
                 activity_links: [
-                    { title: "Exemplos Other vs Another", url: "https://everydayconversationothervsanother.netlify.app/" },
                     { title: "Exemplos Extras Other/Another", url: "https://everydayconversationothervsanotherexe.netlify.app/" },
                     { title: "Quiz Another x Other", url: "https://everydayconversationquizanotherxother.netlify.app/" }
                 ]
             },
             {
                 title: "Música 2 - My Heart Will Go On",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://player.mediadelivery.net/embed/588018/c11d6996-78ad-473f-9995-2ce056c6f81a"
             }
         ]
     },
@@ -111,7 +117,11 @@ export const courseCurriculum = [
             {
                 title: "Aula 9 - MODAL VERBS Part 2",
                 duration: "9 min",
-                video_url: "https://iframe.mediadelivery.net/embed/588018/95f62803-940c-44de-8f25-693b8fadffc5?autoplay=false"
+                video_url: "https://iframe.mediadelivery.net/embed/588018/95f62803-940c-44de-8f25-693b8fadffc5?autoplay=false",
+                activity_links: [
+                    { title: "Exemplos Modal Verbs - Parte 2", url: "https://everydayconversationmodalexemplos2.netlify.app/" },
+                    { title: "Quiz Modal Verbs", url: "https://everydayconversationquizmodalverbs.netlify.app/" }
+                ]
             },
             {
                 title: "Música 3 - \"You're Beautiful\" - James Blunt",
@@ -132,7 +142,10 @@ export const courseCurriculum = [
             },
             {
                 title: "Aula 10.1 - Excelente site para Atividades de Fixação",
-                duration: "5 min"
+                duration: "5 min",
+                activity_links: [
+                    { title: "Prática Interativa Alfabeto", url: "https://www.languageguide.org/english/alphabet" }
+                ]
             },
             {
                 title: "Aula 11 - Dias da Semana",
@@ -153,7 +166,12 @@ export const courseCurriculum = [
             },
             {
                 title: "Since x For – Para Períodos de Tempo",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://everydayconversationsincevsfornovo.netlify.app/",
+                activity_links: [
+                    { title: "Exemplos Since vs For", url: "https://everydayconversationsincevsforexemplo.netlify.app/" },
+                    { title: "Quiz Since x For", url: "https://everydayconversationquizsincexfor.netlify.app/" }
+                ]
             },
             {
                 title: "Música 4 - Stand By Me",
@@ -189,7 +207,12 @@ export const courseCurriculum = [
             },
             {
                 title: "Diferença e quando usar Job vs Work",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://everydayconversationworkxjob.netlify.app/",
+                activity_links: [
+                    { title: "Exemplos Job vs Work", url: "https://everydayconversationjobvswork.netlify.app/" },
+                    { title: "Quiz Job and Work", url: "https://everydayconversationquizjobandwork.netlify.app/" }
+                ]
             },
             {
                 title: "Teste seu conhecimento da semana (Quiz)",
@@ -234,8 +257,8 @@ export const courseCurriculum = [
             {
                 title: "Each x Every – Diferença ao falar de indivíduos ou de grupos.",
                 duration: "5 min",
+                video_url: "https://everydayconversationeachvsevery.netlify.app/",
                 activity_links: [
-                    { title: "Each vs Every - Teoria", url: "https://everydayconversationeachvsevery.netlify.app/" },
                     { title: "Exemplos Each e Every", url: "https://everydayconversationeacheveryexemplos.netlify.app/" },
                     { title: "Quiz Each and Every", url: "https://everydayconversationquizeachandevery.netlify.app/" }
                 ]
