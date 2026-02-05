@@ -45,6 +45,7 @@ const CourseCard = ({ title, description, progress = 0, image, onClick, label, l
                 <img
                     src={image || 'https://placehold.co/600x800/0c1324/FFF?text=Playlist'}
                     alt={title}
+                    loading="lazy"
                 />
                 <div className="course-card__overlay" />
                 <div className="course-card__pill pill">

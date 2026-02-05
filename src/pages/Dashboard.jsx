@@ -125,17 +125,6 @@ const Dashboard = () => {
             </header>
 
             <section className="hero">
-                <div className="hero__media">
-                    <video
-                        src="/capa-plataforma.mp4"
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                    />
-                    <div className="hero__overlay" />
-                </div>
-
                 <div className="hero__content">
                     <span className="pill">Original Everyday · Intensivo</span>
                     <h1 className="text-gradient-animated">Inglês com ritmo de streaming</h1>

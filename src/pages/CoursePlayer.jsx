@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './CoursePlayer.css';
 import Sidebar from '../components/Sidebar';
 import { Card } from '../components/ui/Card';
@@ -139,36 +139,43 @@ const CoursePlayer = () => {
     const currentLessonIndex = flatLessons.findIndex(l => l.id === activeLessonId);
     const nextLesson = currentLessonIndex >= 0 ? flatLessons[currentLessonIndex + 1] : null;
 
-    // Encontrar activity_links do courseContent.js
-    const getLessonActivityLinks = () => {
-        if (!activeLesson) return null;
+    // Criar lookup map uma única vez para melhor performance (O(1) vs O(n²))
+    const lessonActivityMap = useMemo(() => {
+        const map = new Map();
+        const normalizeTitle = (title) => title.toLowerCase().trim().replace(/\s+/g, ' ');
 
         for (const module of courseCurriculum) {
             for (const lesson of module.lessons) {
-                if (typeof lesson !== 'object') continue;
+                if (typeof lesson !== 'object' || !lesson.activity_links) continue;
+                const normalized = normalizeTitle(lesson.title);
+                map.set(normalized, lesson.activity_links);
+            }
+        }
 
-                const lessonTitle = lesson.title;
+        return map;
+    }, []); // Só cria uma vez no mount
 
-                // Normalizar títulos para comparação (remover espaços extras, lowercase)
-                const normalizeTitle = (title) => title.toLowerCase().trim().replace(/\s+/g, ' ');
-                const activeNormalized = normalizeTitle(activeLesson.title);
-                const lessonNormalized = normalizeTitle(lessonTitle);
+    // Encontrar activity_links usando lookup O(1)
+    const activityLinks = useMemo(() => {
+        if (!activeLesson) return null;
 
-                // Match exato ou contém
-                const isMatch = activeNormalized === lessonNormalized ||
-                    activeNormalized.includes(lessonNormalized) ||
-                    lessonNormalized.includes(activeNormalized);
+        const normalizeTitle = (title) => title.toLowerCase().trim().replace(/\s+/g, ' ');
+        const activeNormalized = normalizeTitle(activeLesson.title);
 
-                if (isMatch && lesson.activity_links) {
-                    return lesson.activity_links;
-                }
+        // Busca exata primeiro
+        if (lessonActivityMap.has(activeNormalized)) {
+            return lessonActivityMap.get(activeNormalized);
+        }
+
+        // Fallback: busca por substring (mais lento, mas só quando necessário)
+        for (const [lessonKey, links] of lessonActivityMap.entries()) {
+            if (activeNormalized.includes(lessonKey) || lessonKey.includes(activeNormalized)) {
+                return links;
             }
         }
 
         return null;
-    };
-
-    const activityLinks = getLessonActivityLinks();
+    }, [activeLesson?.title, lessonActivityMap]);
 
     // DEBUG: Log para investigar problema com activity_links
     console.log('🔍 DEBUG CoursePlayer:', {
