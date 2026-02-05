@@ -13,6 +13,7 @@ import { ModuleList } from '../components/ModuleList';
 import { courseCurriculum } from '../lib/courseContent';
 import VerbToBeInteractive from '../components/lessons/InteractiveVerbToBe';
 import InteractiveWelcome from '../components/lessons/InteractiveWelcome';
+import VimeoPlayer from '../components/VimeoPlayer';
 
 // Detectar se é mobile
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
@@ -286,14 +287,22 @@ const CoursePlayer = () => {
                                     <span className="pill">{activeLesson?.duration || '5 min'}</span>
                                 </div>
                                 {activeLesson?.video_url ? (
-                                    <iframe
-                                        src={getEmbedUrl(activeLesson.video_url)}
-                                        title={activeLesson.title}
-                                        frameBorder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                                        allowFullScreen
-                                        style={{ backgroundColor: '#000' }}
-                                    ></iframe>
+                                    // Usar player nativo do Vimeo (mais otimizado) ou iframe para outros
+                                    activeLesson.video_url.includes('vimeo.com') ? (
+                                        <VimeoPlayer
+                                            videoId={activeLesson.video_url.split('/').pop().split('?')[0]}
+                                            title={activeLesson.title}
+                                        />
+                                    ) : (
+                                        <iframe
+                                            src={getEmbedUrl(activeLesson.video_url)}
+                                            title={activeLesson.title}
+                                            frameBorder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                                            allowFullScreen
+                                            style={{ backgroundColor: '#000' }}
+                                        ></iframe>
+                                    )
                                 ) : (
                                     <div className="player-placeholder">
                                         <PlayCircle size={48} style={{ opacity: 0.6 }} />
