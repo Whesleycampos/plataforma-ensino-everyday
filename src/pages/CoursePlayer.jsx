@@ -17,23 +17,24 @@ import InteractiveWelcome from '../components/lessons/InteractiveWelcome';
 const getEmbedUrl = (url) => {
     if (!url) return null;
 
-    // Bunny.net - já está em formato embed
+    // Bunny.net - adiciona parâmetros de otimização
     if (url.includes('mediadelivery.net')) {
-        return url;
+        const separator = url.includes('?') ? '&' : '?';
+        return `${url}${separator}preload=true&autoplay=false`;
     }
 
-    // Vimeo
+    // Vimeo - adiciona parâmetros de otimização
     if (url.includes('vimeo')) {
         const videoId = url.split('/').pop().split('?')[0];
-        return `https://player.vimeo.com/video/${videoId}`;
+        return `https://player.vimeo.com/video/${videoId}?quality=auto&autoplay=0`;
     }
 
-    // YouTube
+    // YouTube - adiciona parâmetros de otimização
     if (url.includes('youtube') || url.includes('youtu.be')) {
         const videoId = url.includes('watch?v=')
             ? url.split('watch?v=')[1].split('&')[0]
             : url.split('/').pop();
-        return `https://www.youtube.com/embed/${videoId}`;
+        return `https://www.youtube.com/embed/${videoId}?modestbranding=1&rel=0`;
     }
 
     return url;
@@ -283,7 +284,7 @@ const CoursePlayer = () => {
                                         frameBorder="0"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                                         allowFullScreen
-                                        loading="lazy"
+                                        style={{ backgroundColor: '#000' }}
                                     ></iframe>
                                 ) : (
                                     <div className="player-placeholder">
