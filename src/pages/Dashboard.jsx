@@ -8,6 +8,7 @@ import { supabase } from '../lib/supabase';
 import { useTheme } from '../contexts/ThemeContext';
 import '../components/ui/Stars.css';
 import './Dashboard.css';
+import '../styles/mobile-optimizations.css';
 import { courseCurriculum } from '../lib/courseContent';
 
 const Dashboard = () => {
@@ -22,6 +23,10 @@ const Dashboard = () => {
         totalModules: modules.length,
         totalLessons: 0
     });
+
+    // Detectar mobile para otimizações
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                     window.innerWidth <= 768;
 
     const heroLessons = modules[0]?.lessons?.length ?? 0;
     const totalLessonsCount = modules.reduce((acc, m) => acc + m.lessons.length, 0);
@@ -73,9 +78,9 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="dashboard-shell" id="main-content" role="main">
-            <div className="stars" />
-            <div className="dashboard-glow" />
+        <div className="dashboard-shell" id="main-content" role="main" data-mobile={isMobile}>
+            {!isMobile && <div className="stars" />}
+            {!isMobile && <div className="dashboard-glow" />}
 
             {/* Mobile Sidebar */}
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -124,10 +129,10 @@ const Dashboard = () => {
                 </div>
             </header>
 
-            <section className="hero">
+            <section className="hero" data-mobile={isMobile}>
                 <div className="hero__content">
                     <span className="pill">Original Everyday · Intensivo</span>
-                    <h1 className="text-gradient-animated">Inglês com ritmo de streaming</h1>
+                    <h1 className={isMobile ? "" : "text-gradient-animated"}>Inglês com ritmo de streaming</h1>
                     <p>
                         Uma experiência premium de aprendizado contínuo: interface de streaming, lançamentos semanais e aulas rápidas para maratonar como se fosse sua série favorita.
                     </p>

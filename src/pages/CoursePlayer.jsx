@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './CoursePlayer.css';
+import '../styles/mobile-optimizations.css';
 import Sidebar from '../components/Sidebar';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -13,6 +14,10 @@ import { courseCurriculum } from '../lib/courseContent';
 import VerbToBeInteractive from '../components/lessons/InteractiveVerbToBe';
 import InteractiveWelcome from '../components/lessons/InteractiveWelcome';
 
+// Detectar se é mobile
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                 window.innerWidth <= 768;
+
 // Função para obter URL de embed de vídeo (Bunny.net, Vimeo, YouTube)
 const getEmbedUrl = (url) => {
     if (!url) return null;
@@ -23,10 +28,13 @@ const getEmbedUrl = (url) => {
         return `${url}${separator}preload=true&autoplay=false`;
     }
 
-    // Vimeo - adiciona parâmetros de otimização
+    // Vimeo - adiciona parâmetros de otimização mobile-first
     if (url.includes('vimeo')) {
         const videoId = url.split('/').pop().split('?')[0];
-        return `https://player.vimeo.com/video/${videoId}?quality=auto&autoplay=0`;
+        // Mobile: qualidade 540p max, background=0 para economizar recursos
+        const quality = isMobile ? '540p' : 'auto';
+        const background = isMobile ? '&background=0' : '';
+        return `https://player.vimeo.com/video/${videoId}?quality=${quality}&autoplay=0${background}&muted=0&responsive=1`;
     }
 
     // YouTube - adiciona parâmetros de otimização

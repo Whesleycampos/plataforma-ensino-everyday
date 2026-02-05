@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
 
 /**
  * ProtectedRoute - Componente que protege rotas autenticadas
@@ -11,30 +10,16 @@ const ProtectedRoute = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Verificar sessão atual
-        const checkUser = async () => {
-            // TEMPORARY: Bypass auth for UI verification
-            setUser({ email: 'test@example.com', id: 'temp-123' });
+        // Verificar se existe email no localStorage
+        const checkUser = () => {
+            const userEmail = localStorage.getItem('userEmail');
+            if (userEmail) {
+                setUser({ email: userEmail });
+            }
             setLoading(false);
-
-            /* Original code commented out for testing
-            const { data: { session } } = await supabase.auth.getSession();
-            setUser(session?.user ?? null);
-            setLoading(false);
-            */
         };
 
         checkUser();
-
-        // Escutar mudanças de autenticação
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(
-            (_event, session) => {
-                setUser(session?.user ?? null);
-                setLoading(false);
-            }
-        );
-
-        return () => subscription.unsubscribe();
     }, []);
 
     if (loading) {

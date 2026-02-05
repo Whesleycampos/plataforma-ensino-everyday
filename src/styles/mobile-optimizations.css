@@ -1,0 +1,98 @@
+/**
+ * Otimizações específicas para dispositivos móveis
+ * Remove animações pesadas e simplifica layout para melhor performance
+ */
+
+/* Desabilitar animações pesadas em mobile */
+@media (max-width: 768px), (pointer: coarse) {
+    /* Remove todas as animações e transições pesadas */
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    /* Desabilita animações de gradient */
+    .text-gradient-animated {
+        animation: none !important;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Remove blur pesado */
+    .dashboard-glow,
+    .stars {
+        display: none !important;
+    }
+
+    /* Simplifica cards */
+    .course-card__overlay {
+        backdrop-filter: none !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Remove sombras complexas */
+    .course-card,
+    .hero__card {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* Otimiza hero para mobile */
+    [data-mobile="true"].hero {
+        min-height: auto !important;
+        padding: 2rem 1rem !important;
+    }
+
+    /* Remove transformações pesadas em hover */
+    .course-card:hover {
+        transform: none !important;
+    }
+
+    /* Simplifica progress bars */
+    .hero__progress-bar span {
+        transition: none !important;
+    }
+
+    /* Force hardware acceleration apenas onde necessário */
+    .course-card__media img {
+        will-change: auto !important;
+    }
+
+    /* Otimiza scroll */
+    .dashboard-shell {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: auto !important;
+    }
+
+    /* Remove efeitos de parallax */
+    .hero__media {
+        transform: none !important;
+    }
+
+    /* Simplifica pills e badges */
+    .pill {
+        backdrop-filter: none !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+}
+
+/* Otimização adicional para dispositivos muito fracos */
+@media (max-width: 480px) {
+    /* Força renderização mais simples */
+    * {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+
+    /* Remove gradientes complexos */
+    .hero__content h1 {
+        background: none !important;
+        color: var(--text-primary) !important;
+        -webkit-text-fill-color: inherit !important;
+    }
+}

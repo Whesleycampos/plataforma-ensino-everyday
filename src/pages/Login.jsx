@@ -1,35 +1,27 @@
 import React, { useState } from 'react';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
-import { Mail, Lock, ArrowRight } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Mail, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import '../components/ui/Stars.css'; // Import Space Background
-
-import { supabase } from '../lib/supabase';
 
 const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError(null);
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
+        // Salvar email no localStorage
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('loginDate', new Date().toISOString());
 
-        if (error) {
-            setError('E-mail ou senha incorretos.');
-            setLoading(false);
-        } else {
+        // Simular pequeno delay para melhor UX
+        setTimeout(() => {
             navigate('/dashboard');
-        }
+        }, 500);
     };
 
     return (
@@ -80,7 +72,7 @@ const Login = () => {
                         <h1 className="text-gradient-animated" style={{ fontSize: '1.8rem', marginBottom: '0.5rem', fontWeight: 700, lineHeight: 1.2 }}>
                             Curso de inglês<br />Everyday Conversation
                         </h1>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Bem-vindo de volta! Faça login para continuar.</p>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Digite seu email para acessar a plataforma e salvar seu progresso</p>
                     </div>
 
                     <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -104,42 +96,6 @@ const Login = () => {
                             />
                         </div>
 
-                        <div style={{ position: 'relative' }}>
-                            <Lock size={20} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
-                            <Input
-                                type="password"
-                                placeholder="Sua senha"
-                                style={{
-                                    paddingLeft: '3rem',
-                                    paddingRight: '1rem',
-                                    height: '52px',
-                                    fontSize: '1rem',
-                                    background: 'rgba(34, 34, 34, 0.8)',
-                                    borderColor: 'rgba(255,255,255,0.08)',
-                                    transition: 'all 0.25s ease'
-                                }}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-
-                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <Link to="/forgot-password" style={{ fontSize: '0.875rem', color: '#a78bfa', fontWeight: 500, opacity: 0.9, transition: 'opacity 0.2s', textDecoration: 'none' }}>
-                                Esqueceu a senha?
-                            </Link>
-                        </div>
-
-                        {error && <div style={{
-                            padding: '0.75rem',
-                            background: 'rgba(239, 68, 68, 0.1)',
-                            border: '1px solid rgba(239, 68, 68, 0.2)',
-                            color: '#fca5a5',
-                            borderRadius: 'var(--radius-md)',
-                            textAlign: 'center',
-                            fontSize: '0.9rem'
-                        }}>{error}</div>}
-
                         <Button
                             type="submit"
                             style={{
@@ -157,10 +113,6 @@ const Login = () => {
                             {loading ? 'Entrando...' : <>Entrar na Plataforma <ArrowRight size={20} /></>}
                         </Button>
                     </form>
-
-                    <div style={{ marginTop: '2rem', textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                        Não tem uma conta? <Link to="/register" style={{ color: '#a78bfa', fontWeight: 600 }}>Crie agora</Link>
-                    </div>
                 </div>
             </div>
         </div>
