@@ -32,7 +32,6 @@ async function debugMatching() {
     for (const dbLesson of lessonsDB) {
         const dbNormalized = normalizeTitle(dbLesson.title);
         let foundMatch = false;
-        let matchedWith = null;
 
         // Buscar no courseContent.js
         for (const module of courseCurriculum) {
@@ -48,7 +47,6 @@ async function debugMatching() {
 
                 if (isMatch) {
                     foundMatch = true;
-                    matchedWith = lesson.title;
 
                     if (lesson.activity_links && lesson.activity_links.length > 0) {
                         console.log(`✅ MATCH COM LINKS (${lesson.activity_links.length} links)`);

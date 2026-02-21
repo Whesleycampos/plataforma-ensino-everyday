@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, PlayCircle, CheckCircle, Lock } from 'lucide-react';
+import { ChevronDown, ChevronRight, PlayCircle, CheckCircle } from 'lucide-react';
 
 const ModuleItem = ({ module, lessons, activeLessonId, completedLessons, onSelectLesson, isDefaultOpen }) => {
     const [isOpen, setIsOpen] = useState(isDefaultOpen);
@@ -62,7 +62,7 @@ const ModuleItem = ({ module, lessons, activeLessonId, completedLessons, onSelec
     );
 };
 
-export const ModuleList = ({ modules, allLessons, activeLessonId, completedLessons, onSelectLesson, expandedModuleIndex }) => {
+export const ModuleList = ({ modules, activeLessonId, completedLessons, onSelectLesson, expandedModuleIndex }) => {
     return (
         <div className="module-list">
             {modules.map((module, index) => (

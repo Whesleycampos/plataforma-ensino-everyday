@@ -1,5 +1,37 @@
 import { supabase } from '../supabase';
 
+const normalizeEmail = (email) => (email || '').trim().toLowerCase();
+
+const getCurrentEmail = () => {
+    return normalizeEmail(localStorage.getItem('userEmail'));
+};
+
+const getProgressStorageKey = (email) => {
+    return `student_progress_${normalizeEmail(email)}`;
+};
+
+const getLocalProgressByEmail = (email) => {
+    const normalizedEmail = normalizeEmail(email);
+    if (!normalizedEmail) return [];
+
+    try {
+        const key = getProgressStorageKey(normalizedEmail);
+        const stored = JSON.parse(localStorage.getItem(key) || '[]');
+        return Array.isArray(stored) ? stored : [];
+    } catch {
+        return [];
+    }
+};
+
+const saveLocalProgressByEmail = (email, lessons) => {
+    const normalizedEmail = normalizeEmail(email);
+    if (!normalizedEmail) return;
+
+    const key = getProgressStorageKey(normalizedEmail);
+    const uniqueLessons = [...new Set(lessons)];
+    localStorage.setItem(key, JSON.stringify(uniqueLessons));
+};
+
 export const getCourses = async () => {
     const { data, error } = await supabase
         .from('courses')
@@ -36,19 +68,30 @@ export const getCourseDetails = async (courseId) => {
 };
 
 export const getStudentProgress = async () => {
+    const localEmail = getCurrentEmail();
+    const localProgress = getLocalProgressByEmail(localEmail);
+
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return [];
+    if (!user) return localProgress;
 
     const { data, error } = await supabase
         .from('student_progress')
         .select('lesson_id')
         .eq('user_id', user.id);
 
-    if (error) return [];
-    return data.map(item => item.lesson_id); // Return array of completed lesson IDs
+    if (error) return localProgress;
+
+    const dbProgress = data.map(item => item.lesson_id);
+    return [...new Set([...dbProgress, ...localProgress])];
 };
 
 export const markLessonComplete = async (lessonId) => {
+    const localEmail = getCurrentEmail();
+    const localProgress = getLocalProgressByEmail(localEmail);
+    if (!localProgress.includes(lessonId)) {
+        saveLocalProgressByEmail(localEmail, [...localProgress, lessonId]);
+    }
+
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 

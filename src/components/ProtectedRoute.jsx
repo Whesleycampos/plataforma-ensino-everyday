@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children }) => {
     useEffect(() => {
         // Verificar se existe email no localStorage
         const checkUser = () => {
-            const userEmail = localStorage.getItem('userEmail');
+            const userEmail = (localStorage.getItem('userEmail') || '').trim().toLowerCase();
             if (userEmail) {
                 setUser({ email: userEmail });
             }

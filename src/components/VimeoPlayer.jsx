@@ -12,6 +12,8 @@ const VimeoPlayer = ({ videoId, title }) => {
     useEffect(() => {
         if (!videoId || !containerRef.current) return;
 
+        console.log('🎬 Inicializando Vimeo Player com videoId:', videoId);
+
         // Detectar se é mobile
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
                          window.innerWidth <= 768;
@@ -31,8 +33,28 @@ const VimeoPlayer = ({ videoId, title }) => {
             background: false,
         };
 
+        console.log('🎬 Opções do player:', options);
+
         // Inicializar player
-        playerRef.current = new Player(containerRef.current, options);
+        try {
+            playerRef.current = new Player(containerRef.current, options);
+
+            // Log de erros
+            playerRef.current.on('error', (error) => {
+                console.error('❌ Erro no Vimeo Player:', error);
+            });
+        } catch (error) {
+            console.error('❌ Erro ao criar Vimeo Player:', error);
+        }
+
+        // Em mobile: entrar em fullscreen automaticamente ao clicar play
+        if (isMobile) {
+            playerRef.current.on('play', () => {
+                playerRef.current.requestFullscreen().catch((err) => {
+                    console.log('Fullscreen não disponível:', err.message);
+                });
+            });
+        }
 
         // Otimização: carregar apenas quando visível
         const observer = new IntersectionObserver(

@@ -9,6 +9,8 @@ import './App.css';
 
 // Code splitting: carrega páginas apenas quando necessário
 const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const CoursePlayer = lazy(() => import('./pages/CoursePlayer'));
 const Profile = lazy(() => import('./pages/Profile'));
@@ -23,6 +25,8 @@ function App() {
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />
@@ -43,8 +47,11 @@ function App() {
                 <Achievements />
               </ProtectedRoute>
             } />
+            <Route path="/settings" element={<Navigate to="/profile" replace />} />
+            <Route path="/reset-password" element={<Navigate to="/login" replace />} />
             {/* Default redirect */}
             <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </Suspense>
       </Router>
@@ -54,4 +61,3 @@ function App() {
 }
 
 export default App;
-

@@ -740,35 +740,24 @@
     padding: 0.6rem !important;
   }
 
-  /* Hide "Explorar" pill on mobile */
-  .topbar-actions .pill:first-of-type {
+  /* Hide "Explorar" and "Continuar" pills on mobile */
+  .topbar-actions .pill {
     display: none;
   }
 
+  /* Esconder divider na topbar em mobile */
+  .topbar-actions .divider {
+    display: none;
+  }
+
+  /* Esconder TODA a seção hero em mobile - ir direto para as pastas */
   .hero {
-    padding: 1.25rem;
-    border-radius: 16px;
+    display: none !important;
   }
 
-  .hero__content p {
-    font-size: 0.9rem;
-  }
-
-  .hero__actions {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .hero__actions button {
-    width: 100%;
-  }
-
-  .hero__card {
-    padding: 1.25rem;
-  }
-
-  .hero__chips {
-    display: none;
+  /* Ajustar margem do shelf para compensar hero removido */
+  .shelf {
+    margin-top: 1rem;
   }
 
   .shelf__header {
@@ -871,12 +860,7 @@
   }
 
   .hero__card {
-    padding: 1rem;
-    border-radius: 12px;
-  }
-
-  .hero__card h3 {
-    font-size: 1rem;
+    display: none;
   }
 
   .hero__progress-bar {

@@ -24,3 +24,10 @@
     outline: 2px solid white;
     outline-offset: 2px;
 }
+
+/* Esconder em mobile - não útil para toque */
+@media (max-width: 768px) {
+    .skip-link {
+        display: none !important;
+    }
+}

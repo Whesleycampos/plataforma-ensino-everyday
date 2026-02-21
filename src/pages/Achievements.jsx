@@ -8,12 +8,10 @@ import {
 import { Card } from '../components/ui/Card';
 import Sidebar from '../components/Sidebar';
 import { supabase } from '../lib/supabase';
-import { useToast } from '../contexts/ToastContext';
 import './Achievements.css';
 
 const Achievements = () => {
     const navigate = useNavigate();
-    const { toast } = useToast();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [stats, setStats] = useState({
         completedLessons: 0,

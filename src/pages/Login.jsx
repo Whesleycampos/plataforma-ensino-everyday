@@ -14,9 +14,19 @@ const Login = () => {
         e.preventDefault();
         setLoading(true);
 
-        // Salvar email no localStorage
-        localStorage.setItem('userEmail', email);
+        const normalizedEmail = email.trim().toLowerCase();
+
+        // Salvar e-mail ativo e data de login
+        localStorage.setItem('userEmail', normalizedEmail);
         localStorage.setItem('loginDate', new Date().toISOString());
+
+        // Registrar histórico de alunos que já acessaram neste dispositivo
+        const registryKey = 'registered_students';
+        const registeredStudents = JSON.parse(localStorage.getItem(registryKey) || '[]');
+        if (!registeredStudents.includes(normalizedEmail)) {
+            registeredStudents.push(normalizedEmail);
+            localStorage.setItem(registryKey, JSON.stringify(registeredStudents));
+        }
 
         // Simular pequeno delay para melhor UX
         setTimeout(() => {

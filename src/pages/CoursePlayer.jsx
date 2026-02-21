@@ -1,23 +1,22 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import './CoursePlayer.css';
 import '../styles/mobile-optimizations.css';
 import Sidebar from '../components/Sidebar';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { PlayCircle, FileText, CheckCircle, Sun, Moon, Menu, List, ChevronRight, HelpCircle } from 'lucide-react';
+import { PlayCircle, FileText, CheckCircle, Sun, Moon, Menu, List, ChevronRight, HelpCircle, Hammer } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { getCourseDetails, getStudentProgress, markLessonComplete } from '../lib/api/courses';
 import { ModuleList } from '../components/ModuleList';
 
 import { courseCurriculum } from '../lib/courseContent';
 import VerbToBeInteractive from '../components/lessons/InteractiveVerbToBe';
 import InteractiveWelcome from '../components/lessons/InteractiveWelcome';
-import VimeoPlayer from '../components/VimeoPlayer';
 
 // Detectar se é mobile
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-                 window.innerWidth <= 768;
+    window.innerWidth <= 768;
 
 // Função para obter URL de embed de vídeo (Bunny.net, Vimeo, YouTube)
 const getEmbedUrl = (url) => {
@@ -29,13 +28,22 @@ const getEmbedUrl = (url) => {
         return `${url}${separator}preload=true&autoplay=false`;
     }
 
-    // Vimeo - adiciona parâmetros de otimização mobile-first
-    if (url.includes('vimeo')) {
-        const videoId = url.split('/').pop().split('?')[0];
-        // Mobile: qualidade 540p max, background=0 para economizar recursos
-        const quality = isMobile ? '540p' : 'auto';
-        const background = isMobile ? '&background=0' : '';
-        return `https://player.vimeo.com/video/${videoId}?quality=${quality}&autoplay=0${background}&muted=0&responsive=1`;
+    // Vimeo - converte URL pública para embed player
+    if (url.includes('vimeo.com')) {
+        // Extrair ID do vídeo (funciona com vimeo.com/ID ou player.vimeo.com/video/ID)
+        let videoId = url.split('/').pop().split('?')[0];
+
+        // Se já for URL de player, extrair o ID correto
+        if (url.includes('player.vimeo.com/video/')) {
+            videoId = url.split('player.vimeo.com/video/')[1].split('?')[0];
+        } else if (url.includes('vimeo.com/')) {
+            videoId = url.split('vimeo.com/')[1].split('?')[0].split('/')[0];
+        }
+
+        console.log('🎬 Vimeo Video ID extraído:', videoId);
+
+        // URL embed do Vimeo com parâmetros otimizados
+        return `https://player.vimeo.com/video/${videoId}?autoplay=0&muted=0&controls=1&title=1&byline=1&portrait=1`;
     }
 
     // YouTube - adiciona parâmetros de otimização
@@ -52,6 +60,7 @@ const getEmbedUrl = (url) => {
 const CoursePlayer = () => {
     const { id } = useParams();
     const location = useLocation();
+    const navigate = useNavigate();
     const { theme, toggleTheme } = useTheme();
     const [course, setCourse] = useState(null);
     const [modules, setModules] = useState([]);
@@ -61,6 +70,29 @@ const CoursePlayer = () => {
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [showMobileList, setShowMobileList] = useState(false);
+    const iframeRef = useRef(null);
+    const [hasRequestedFullscreen, setHasRequestedFullscreen] = useState(false);
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+
+    // Função para entrar em fullscreen em mobile ao tocar no iframe
+    const handleIframeTouchStart = useCallback(() => {
+        if (isMobile && !hasRequestedFullscreen && iframeRef.current) {
+            const iframe = iframeRef.current;
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen().catch(() => { });
+            } else if (iframe.webkitRequestFullscreen) {
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.webkitEnterFullscreen) {
+                iframe.webkitEnterFullscreen();
+            }
+            setHasRequestedFullscreen(true);
+        }
+    }, [hasRequestedFullscreen]);
+
+    // Reset fullscreen flag quando muda de aula
+    useEffect(() => {
+        setHasRequestedFullscreen(false);
+    }, [activeLessonId]);
 
     useEffect(() => {
         async function loadData() {
@@ -70,13 +102,10 @@ const CoursePlayer = () => {
 
                 setCourse(course);
                 setFlatLessons(lessons);
+                setCompletedLessons(progress);
 
-                // Merge progresso do Supabase com progresso local (para aulas legacy)
-                const localProgress = JSON.parse(localStorage.getItem('legacy_progress') || '[]');
-                setCompletedLessons([...progress, ...localProgress]);
-
-                // NOVA LÓGICA: Sempre usa courseCurriculum como base
-                // Faz match por título para adicionar video_url do banco quando disponível
+                // LÓGICA SIMPLIFICADA: Usa courseCurriculum como fonte única de verdade
+                // O banco só serve para progresso do aluno, não para URLs de vídeo
                 const mergedModules = courseCurriculum.map((module, modIndex) => {
                     return {
                         id: `mod-${modIndex}`,
@@ -84,20 +113,26 @@ const CoursePlayer = () => {
                         lessons: module.lessons.map((lessonItem, lessIndex) => {
                             const lessonTitle = typeof lessonItem === 'object' ? lessonItem.title : lessonItem;
 
-                            // Busca no banco por título similar (primeiros 15 caracteres)
+                            // Busca no banco apenas para pegar o ID (para progresso)
                             const dbLesson = lessons.find(l =>
                                 l.title.toLowerCase().includes(lessonTitle.toLowerCase().substring(0, 15)) ||
                                 lessonTitle.toLowerCase().includes(l.title.toLowerCase().substring(0, 15))
                             );
 
+                            // USA SEMPRE o courseCurriculum como fonte de dados
+                            const videoUrl = typeof lessonItem === 'object' ? lessonItem.video_url : null;
+                            const duration = typeof lessonItem === 'object' ? lessonItem.duration : '5 min';
+                            const type = typeof lessonItem === 'object' ? lessonItem.type : 'video';
+                            const component = typeof lessonItem === 'object' ? lessonItem.component : null;
+
                             return {
                                 id: dbLesson?.id || `legacy-${modIndex}-${lessIndex}`,
-                                title: lessonTitle, // Mantém o título do currículo para consistência
-                                duration: dbLesson?.duration || (typeof lessonItem === 'object' ? lessonItem.duration : '5 min'),
-                                video_url: dbLesson?.video_url || (typeof lessonItem === 'object' ? lessonItem.video_url : null),
-                                type: dbLesson?.type || (typeof lessonItem === 'object' ? lessonItem.type : 'video'),
-                                component: dbLesson?.component || (typeof lessonItem === 'object' ? lessonItem.component : null),
-                                isPlaceholder: !dbLesson
+                                title: lessonTitle,
+                                duration: duration,
+                                video_url: videoUrl,
+                                type: type,
+                                component: component,
+                                isPlaceholder: !videoUrl
                             };
                         })
                     };
@@ -130,24 +165,12 @@ const CoursePlayer = () => {
 
         if (!completedLessons.includes(activeLessonId)) {
             setCompletedLessons(prev => [...prev, activeLessonId]);
-
-            if (activeLessonId.toString().startsWith('legacy')) {
-                // Salva progresso de aulas legacy no localStorage
-                const localProgress = JSON.parse(localStorage.getItem('legacy_progress') || '[]');
-                if (!localProgress.includes(activeLessonId)) {
-                    localProgress.push(activeLessonId);
-                    localStorage.setItem('legacy_progress', JSON.stringify(localProgress));
-                }
-            } else {
-                await markLessonComplete(activeLessonId);
-            }
+            await markLessonComplete(activeLessonId);
         }
     };
 
     const activeLesson = flatLessons.find(l => l.id === activeLessonId) ||
         modules.flatMap(m => m.lessons).find(l => l.id === activeLessonId);
-    const currentLessonIndex = flatLessons.findIndex(l => l.id === activeLessonId);
-    const nextLesson = currentLessonIndex >= 0 ? flatLessons[currentLessonIndex + 1] : null;
 
     // Criar lookup map uma única vez para melhor performance (O(1) vs O(n²))
     const lessonActivityMap = useMemo(() => {
@@ -185,15 +208,7 @@ const CoursePlayer = () => {
         }
 
         return null;
-    }, [activeLesson?.title, lessonActivityMap]);
-
-    // DEBUG: Log para investigar problema com activity_links
-    console.log('🔍 DEBUG CoursePlayer:', {
-        activeLesson: activeLesson?.title,
-        activityLinks: activityLinks,
-        activityLinksCount: activityLinks?.length || 0,
-        courseCurriculumModules: courseCurriculum.length
-    });
+    }, [activeLesson, lessonActivityMap]);
 
     if (loading) return (
         <div className="flex-center" style={{ height: '100vh', flexDirection: 'column', gap: '1rem' }}>
@@ -219,7 +234,7 @@ const CoursePlayer = () => {
             <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
             <main className="course-main" id="main-content" role="main">
-                <div className="course-content">
+                <div className={`course-content ${showMobileList ? 'player-hidden' : ''}`}>
                     <div className="course-header">
                         <div style={{ flex: 1 }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
@@ -287,62 +302,40 @@ const CoursePlayer = () => {
                                     <span className="pill">{activeLesson?.duration || '5 min'}</span>
                                 </div>
                                 {activeLesson?.video_url ? (
-                                    // Usar player nativo do Vimeo (mais otimizado) ou iframe para outros
-                                    activeLesson.video_url.includes('vimeo.com') ? (
-                                        <VimeoPlayer
-                                            videoId={activeLesson.video_url.split('/').pop().split('?')[0]}
-                                            title={activeLesson.title}
-                                        />
-                                    ) : (
-                                        <iframe
-                                            src={getEmbedUrl(activeLesson.video_url)}
-                                            title={activeLesson.title}
-                                            frameBorder="0"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                                            allowFullScreen
-                                            style={{ backgroundColor: '#000' }}
-                                        ></iframe>
-                                    )
+                                    // Usar iframe para todos os vídeos (Bunny.net, Vimeo, YouTube)
+                                    (() => {
+                                        const embedUrl = getEmbedUrl(activeLesson.video_url);
+                                        console.log('🎬 URL Original:', activeLesson.video_url);
+                                        console.log('🎬 URL Embed:', embedUrl);
+                                        return (
+                                            <iframe
+                                                ref={iframeRef}
+                                                src={embedUrl}
+                                                title={activeLesson.title}
+                                                frameBorder="0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                                                allowFullScreen
+                                                style={{ backgroundColor: '#000' }}
+                                                onTouchStart={handleIframeTouchStart}
+                                            ></iframe>
+                                        );
+                                    })()
                                 ) : (
-                                    <div className="player-placeholder">
-                                        <PlayCircle size={48} style={{ opacity: 0.6 }} />
-                                        <p>
-                                            {activeLesson
-                                                ? "Este conteúdo não possui vídeo disponível."
-                                                : "Selecione uma aula para assistir"
-                                            }
-                                        </p>
+                                    <div className="player-placeholder under-construction">
+                                        <div className="construction-badge">
+                                            <Hammer size={48} className="construction-icon" />
+                                        </div>
+                                        <h3 className="construction-title">Em construção</h3>
+                                        <p className="construction-subtitle">Pronto em menos de 5 dias</p>
                                     </div>
                                 )}
                             </>
                         )}
                     </div>
 
-                    <Card style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                            <FileText size={18} style={{ color: 'var(--text-secondary)' }} />
-                            <h3 style={{ margin: 0 }}>Sobre a aula</h3>
-                        </div>
-                        <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '1.5rem' }}>
-                            {activeLesson?.title?.toLowerCase().includes('verb') || activeLesson?.title?.toLowerCase().includes('to be')
-                                ? 'Nesta aula você vai aprender o verbo TO BE (ser/estar), um dos verbos mais importantes do inglês. Domine as formas afirmativa, negativa e interrogativa com exemplos práticos do dia a dia.'
-                                : activeLesson?.title?.toLowerCase().includes('adjetiv') || activeLesson?.title?.toLowerCase().includes('possessiv')
-                                ? 'Aprenda a diferença entre pronomes possessivos (my, your, his, her) e adjetivos possessivos. Domine quando usar cada um em frases do cotidiano.'
-                                : activeLesson?.title?.toLowerCase().includes('welcome') || activeLesson?.title?.toLowerCase().includes('bem-vindo')
-                                ? 'Bem-vindo ao Everyday Conversation! Nesta aula de boas-vindas, você vai conhecer a metodologia do curso e dar os primeiros passos no seu aprendizado de inglês.'
-                                : activeLesson?.title?.toLowerCase().includes('pronome') || activeLesson?.title?.toLowerCase().includes('pronoun')
-                                ? 'Aprenda os pronomes pessoais em inglês (I, You, He, She, It, We, They) e como usá-los corretamente em frases do cotidiano.'
-                                : activeLesson?.title?.toLowerCase().includes('present')
-                                ? 'Domine o Present Tense em inglês! Aprenda a conjugar verbos no presente e formar frases para falar sobre rotinas e fatos.'
-                                : activeLesson?.title?.toLowerCase().includes('past')
-                                ? 'Aprenda o Past Tense para falar sobre eventos que já aconteceram. Verbos regulares, irregulares e expressões de tempo.'
-                                : activeLesson?.title?.toLowerCase().includes('future')
-                                ? 'Descubra como falar sobre o futuro em inglês usando will, going to e outras estruturas essenciais.'
-                                : 'Aproveite esta aula do Everyday Conversation! Assista com atenção, pratique os exercícios e não esqueça de fazer os quizzes para fixar o conteúdo.'}
-                        </p>
-
-                        {/* Renderização dinâmica de activity_links */}
-                        {activityLinks && activityLinks.length > 0 ? (
+                    {/* Materiais de Prática - só mostra se tiver activity_links */}
+                    {activityLinks && activityLinks.length > 0 && (
+                        <div className="practice-card-wrapper" style={{ marginTop: '0.5rem' }}>
                             <div className="practice-section">
                                 <div className="practice-section__header">
                                     <h3>Materiais de Prática</h3>
@@ -377,33 +370,60 @@ const CoursePlayer = () => {
                                     })}
                                 </div>
                             </div>
-                        ) : (
-                            <div className="practice-section">
-                                <div className="practice-section__header">
-                                    <h3>Materiais em breve</h3>
-                                    <p>Estamos preparando exercícios e quizzes para esta aula</p>
-                                </div>
-                                <div className="practice-card practice-card--coming-soon" style={{
-                                    background: 'rgba(255,255,255,0.03)',
-                                    border: '1px dashed rgba(255,255,255,0.15)',
-                                    padding: '2rem',
-                                    textAlign: 'center',
-                                    borderRadius: '16px'
-                                }}>
-                                    <PlayCircle size={40} style={{ opacity: 0.4, marginBottom: '0.75rem' }} />
-                                    <p style={{ color: 'var(--text-secondary)', margin: 0 }}>
-                                        Os materiais de prática para "{activeLesson?.title}" estarão disponíveis em breve!
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-                    </Card>
+                        </div>
+                    )}
+
+                    {/* Botão de Concluir Aula - visível em mobile, abaixo dos materiais */}
+                    <button
+                        className={`mobile-complete-btn ${completedLessons.includes(activeLessonId) ? 'mobile-complete-btn--done' : ''}`}
+                        onClick={() => setShowConfirmPopup(true)}
+                    >
+                        <CheckCircle size={24} />
+                        <span>{completedLessons.includes(activeLessonId) ? 'Aula Concluída!' : 'Concluir Aula'}</span>
+                    </button>
                 </div>
+
+                {/* Popup de confirmação */}
+                {showConfirmPopup && (
+                    <div className="confirm-popup-overlay" onClick={() => setShowConfirmPopup(false)}>
+                        <div className="confirm-popup" onClick={e => e.stopPropagation()}>
+                            <h3>Você já estudou os materiais de prática?</h3>
+                            <div className="confirm-popup__buttons">
+                                <button
+                                    className="confirm-popup__btn confirm-popup__btn--yes"
+                                    onClick={() => {
+                                        handleMarkComplete();
+                                        setShowConfirmPopup(false);
+                                    }}
+                                >
+                                    Sim
+                                </button>
+                                <button
+                                    className="confirm-popup__btn confirm-popup__btn--no"
+                                    onClick={() => setShowConfirmPopup(false)}
+                                >
+                                    Não
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Mobile toggle button for course list */}
                 <button
                     className="mobile-list-toggle"
-                    onClick={() => setShowMobileList(!showMobileList)}
+                    onClick={() => {
+                        const newState = !showMobileList;
+                        setShowMobileList(newState);
+                        if (newState) {
+                            setTimeout(() => {
+                                document.querySelector('.mobile-list-toggle')?.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
+                            }, 100);
+                        }
+                    }}
                     aria-label={showMobileList ? 'Esconder lista de aulas' : 'Mostrar lista de aulas'}
                 >
                     <List size={20} />
@@ -421,7 +441,6 @@ const CoursePlayer = () => {
                     <div className="course-list__body">
                         <ModuleList
                             modules={modules}
-                            allLessons={flatLessons}
                             activeLessonId={activeLessonId}
                             completedLessons={completedLessons}
                             onSelectLesson={(lessonId) => {

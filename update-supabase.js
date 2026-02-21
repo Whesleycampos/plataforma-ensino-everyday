@@ -36,7 +36,7 @@ async function updateVerboToBeLesson() {
 
         console.log(`\n🔧 Atualizando aula ID: ${lesson.id}...`);
 
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('lessons')
             .update({
                 video_url: correctVideoUrl

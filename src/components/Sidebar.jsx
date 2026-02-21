@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, BookOpen, MessageCircle, Settings, LogOut, User, X, Trophy } from 'lucide-react';
+import { Home, BookOpen, LogOut, User, X, Trophy } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
@@ -8,10 +8,9 @@ const Sidebar = ({ isOpen = false, onClose = () => {} }) => {
     const navigate = useNavigate();
 
     const navItems = [
-        { icon: <Home size={20} />, label: 'Início', path: '/dashboard' },
+        { icon: <Home size={20} />, label: 'Inicio', path: '/dashboard' },
         { icon: <BookOpen size={20} />, label: 'Meus Cursos', path: '/course/1' },
         { icon: <Trophy size={20} />, label: 'Conquistas', path: '/achievements' },
-        { icon: <Settings size={20} />, label: 'Configurações', path: '/settings' },
     ];
 
     const handleLogout = async () => {
@@ -20,7 +19,6 @@ const Sidebar = ({ isOpen = false, onClose = () => {} }) => {
     };
 
     const handleNavClick = () => {
-        // Close sidebar on mobile after navigation
         if (window.innerWidth <= 1024) {
             onClose();
         }
@@ -28,14 +26,12 @@ const Sidebar = ({ isOpen = false, onClose = () => {} }) => {
 
     return (
         <>
-            {/* Overlay for mobile */}
             <div
                 className={`sidebar-overlay ${isOpen ? 'active' : ''}`}
                 onClick={onClose}
             />
 
             <aside className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
-                {/* Header with close button for mobile */}
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -67,7 +63,7 @@ const Sidebar = ({ isOpen = false, onClose = () => {} }) => {
                                 borderRadius: 'var(--radius-md)',
                                 color: location.pathname === item.path ? 'white' : 'var(--text-secondary)',
                                 background: location.pathname === item.path ? 'rgba(99, 102, 241, 0.1)' : 'transparent',
-                                transition: 'var(--transition)'
+                                transition: 'var(--transition-base)'
                             }}
                         >
                             {item.icon}
@@ -121,7 +117,7 @@ const Sidebar = ({ isOpen = false, onClose = () => {} }) => {
                             padding: '0.75rem 1rem',
                             borderRadius: 'var(--radius-md)',
                             color: 'var(--error)',
-                            transition: 'var(--transition)',
+                            transition: 'var(--transition-base)',
                             background: 'transparent',
                             width: '100%',
                             cursor: 'pointer',

@@ -9,13 +9,11 @@ import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import Sidebar from '../components/Sidebar';
 import { supabase } from '../lib/supabase';
-import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
 import './Profile.css';
 
 const Profile = () => {
     const navigate = useNavigate();
-    const { theme } = useTheme();
     const { toast } = useToast();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [user, setUser] = useState(null);
@@ -309,9 +307,9 @@ const Profile = () => {
                             <span>Continuar Estudando</span>
                             <ChevronRight size={18} />
                         </button>
-                        <button className="action-item" onClick={() => navigate('/settings')}>
+                        <button className="action-item" onClick={() => navigate('/achievements')}>
                             <Shield size={20} />
-                            <span>Configurações</span>
+                            <span>Ver Conquistas</span>
                             <ChevronRight size={18} />
                         </button>
                         <button className="action-item danger" onClick={handleLogout}>

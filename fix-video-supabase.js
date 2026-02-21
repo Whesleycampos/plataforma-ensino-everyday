@@ -26,7 +26,7 @@ async function fixVideoUrls() {
         console.log(`📝 Atualizando: ${fix.title} (ID: ${fix.id})`);
         console.log(`   Nova URL: ${fix.correctUrl}`);
 
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('lessons')
             .update({ video_url: fix.correctUrl })
             .eq('id', fix.id)

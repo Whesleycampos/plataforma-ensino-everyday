@@ -1,161 +1,203 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowRight, ChevronRight, ChevronLeft, Star, Heart, Zap, BookOpen, MessageCircle, Check, Play, Volume2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowRight, ChevronRight, ChevronLeft, Star, Zap, MessageCircle, Check, BookOpen, Repeat } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 
 const InteractiveWelcome = ({ onComplete }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [score, setScore] = useState(0);
-    const [feedback, setFeedback] = useState(null); // 'correct' | 'wrong'
+    const [feedback, setFeedback] = useState(null);
 
-    // --- SLIDE DATA ENGINE ---
     const slides = [
-        // SECTION 1: WELCOME & PROMISE
+        // INTRO
         {
             type: 'cover',
-            title: 'Welcome to Everyday',
-            subtitle: 'Sua jornada para a fluência começa agora.',
-            icon: <Star size={60} color="#fbbf24" />,
-            bg: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)'
+            title: 'Mastering Verb TO BE',
+            subtitle: 'O pilar mais importante do inglês.',
+            icon: <Zap size={60} color="#fcd34d" />,
         },
         {
             type: 'text',
-            title: 'Bora falar inglês?',
-            content: 'Você não está aqui apenas para "estudar" um idioma. Você está aqui para vivê-lo. O método Everyday foi desenhado para inserir o inglês na sua rotina, como sua série favorita.',
-            highlight: 'Esqueça a decoreba.',
-            icon: <Heart size={40} color="#f43f5e" />
-        },
-        {
-            type: 'text',
-            title: 'O Segredo: Input',
-            content: 'Crianças aprendem ouvindo, não lendo regras gramaticais. Aqui, seu foco será receber muito "Input" (áudio e leitura) antes de se preocupar com o "Output" (falar).',
-            highlight: 'Primeiro encha o copo, depois transborde.',
-            icon: <Volume2 size={40} color="#3b82f6" />
+            title: 'O que é?',
+            content: 'O verbo TO BE é o camaleão do inglês. Ele significa duas coisas ao mesmo tempo: SER e ESTAR.',
+            highlight: 'Contexto é tudo.',
+            icon: <Star size={40} color="#fbbf24" />
         },
 
-        // SECTION 2: TOOLS
+        // AFFIRMATIVE - I & YOU
         {
-            type: 'info-card',
-            title: 'Ferramenta 1: PDF + Áudio',
-            content: 'Todo módulo tem um texto com áudio nativo. Sua missão: ouvir enquanto lê, repetidas vezes, até entender naturalmente.',
-            visual: '📄 + 🎧 = 🧠',
-            icon: <BookOpen size={40} color="#10b981" />
-        },
-        {
-            type: 'info-card',
-            title: 'Ferramenta 2: ANKI',
-            content: 'Usamos o ANKI para Repetição Espaçada. Ele garante que você revise as palavras no momento exato em que seu cérebro está prestes a esquecer.',
-            visual: '📉 ➡️ 📈',
-            icon: <Zap size={40} color="#f59e0b" />
-        },
-        {
-            type: 'info-card',
-            title: 'Ferramenta 3: Comunidade',
-            content: 'Nosso grupo no WhatsApp é seu safe place. Tire dúvidas, mande áudios e interaja com outros alunos sem medo de julgamentos.',
-            visual: '👥💬',
-            icon: <MessageCircle size={40} color="#25D366" />
-        },
-
-        // SECTION 3: QUIZ - METHODOLOGY
-        {
-            type: 'quiz',
-            question: 'Qual é o foco principal no início do aprendizado?',
-            options: [
-                { text: 'Decorar regras de gramática', correct: false },
-                { text: 'Falar perfeito desde o dia 1', correct: false },
-                { text: 'Muito Input (Ouvir e Ler)', correct: true }
+            type: 'conjugation',
+            title: 'O Básico: Eu e Você',
+            pairs: [
+                { sub: 'I', verb: 'am', ex: 'I am happy. (Eu sou/estou feliz)' },
+                { sub: 'You', verb: 'are', ex: 'You are awesome. (Você é incrível)' },
             ]
         },
 
-        // SECTION 4: ENGLISH INTRO (VERB TO BE TEASER)
+        // QUIZ 1
+        {
+            type: 'quiz',
+            question: 'Como se diz "Eu estou pronto"?',
+            options: [
+                { text: 'I is ready', correct: false },
+                { text: 'I are ready', correct: false },
+                { text: 'I am ready', correct: true }
+            ]
+        },
+
+        // AFFIRMATIVE - HE / SHE / IT
+        {
+            type: 'conjugation',
+            title: 'A Terceira Pessoa (Singular)',
+            pairs: [
+                { sub: 'He', verb: 'is', ex: 'He is my brother. (Ele é...)' },
+                { sub: 'She', verb: 'is', ex: 'She is a doctor. (Ela é...)' },
+                { sub: 'It', verb: 'is', ex: 'It is a cat. (Isto/Ele é...)' },
+            ]
+        },
+        {
+            type: 'info-card',
+            title: 'O Curioso "IT"',
+            content: 'Em português, dizemos "É um cachorro". Em inglês, NUNCA deixamos o verbo sozinho. Precisamos do "It".',
+            example: 'It is a dog. (Não apenas "Is a dog")',
+            icon: <BookOpen size={40} color="#3b82f6" />
+        },
+
+        // QUIZ 2
+        {
+            type: 'quiz',
+            question: 'Complete: _____ is my sister.',
+            options: [
+                { text: 'He', correct: false },
+                { text: 'She', correct: true },
+                { text: 'It', correct: false }
+            ]
+        },
+
+        // AFFIRMATIVE - PLURAL
+        {
+            type: 'conjugation',
+            title: 'O Plural (Nós, Vocês, Eles)',
+            pairs: [
+                { sub: 'We', verb: 'are', ex: 'We are friends. (Nós somos...)' },
+                { sub: 'You', verb: 'are', ex: 'You are guys. (Vocês são...)' },
+                { sub: 'They', verb: 'are', ex: 'They are here. (Eles estão...)' },
+            ]
+        },
+
+        // CONTRACTIONS
+        {
+            type: 'concept',
+            title: 'Contrações (Speaking)',
+            content: 'Nativos amam encurtar as palavras. No dia a dia, raramente você ouvirá "I am".',
+            list: [
+                'I am → I\'m',
+                'You are → You\'re',
+                'He is → He\'s',
+                'We are → We\'re'
+            ],
+            icon: <MessageCircle size={40} color="#a5b4fc" />
+        },
+
+        // QUIZ 3
+        {
+            type: 'quiz',
+            question: 'Qual a contração de "They are"?',
+            options: [
+                { text: 'They\'s', correct: false },
+                { text: 'They\'re', correct: true },
+                { text: 'Their', correct: false }
+            ]
+        },
+
+        // NEGATIVE
         {
             type: 'section-break',
-            title: 'Vamos para a prática!',
-            subtitle: 'Uma prévia do que você vai ver na Semana 1.',
-            color: '#8b5cf6'
+            title: 'Modo Negativo',
+            subtitle: 'Dizendo NÃO em inglês.',
+            icon: <Zap size={50} color="#f43f5e" />
+        },
+        {
+            type: 'text',
+            title: 'A Regra do NOT',
+            content: 'Para negar com o To Be, é muito fácil: basta colocar o NOT depois do verbo.',
+            example: 'I am NOT sad. (Eu não estou triste)',
+            icon: <Check size={40} color="#f43f5e" />
+        },
+        {
+            type: 'list-card',
+            title: 'Exemplos Negativos',
+            items: [
+                { start: 'She is', end: 'She is NOT (She isn\'t)' },
+                { start: 'You are', end: 'You are NOT (You aren\'t)' },
+                { start: 'It is', end: 'It is NOT (It isn\'t)' }
+            ]
+        },
+
+        // QUIZ 4
+        {
+            type: 'quiz',
+            question: 'Transforme em negativo: "We are tired."',
+            options: [
+                { text: 'We no are tired', correct: false },
+                { text: 'We not are tired', correct: false },
+                { text: 'We aren\'t tired', correct: true }
+            ]
+        },
+
+        // INTERROGATIVE
+        {
+            type: 'section-break',
+            title: 'Fazendo Perguntas',
+            subtitle: 'A inversão mágica.',
+            icon: <Repeat size={50} color="#10b981" />
         },
         {
             type: 'concept',
-            title: 'O Verbo TO BE',
-            content: 'Ele significa SER ou ESTAR. Sim, em inglês é a mesma palavra! "I am" pode ser "Eu sou" ou "Eu estou".',
-            example: 'I am happy. (Eu estou feliz)',
-            icon: <Zap size={40} color="#fcd34d" />
+            title: 'Troca de Lugar',
+            content: 'Para perguntar, o verbo To Be pula para a frente da frase.',
+            example: 'You are happy. → Are you happy?',
+            icon: <Repeat size={40} color="#10b981" />
         },
         {
-            type: 'conjugation',
-            pairs: [
-                { sub: 'I', verb: 'am', ex: 'Eu sou/estou' },
-                { sub: 'You', verb: 'are', ex: 'Você é/está' },
-            ]
-        },
-        {
-            type: 'conjugation',
-            pairs: [
-                { sub: 'He', verb: 'is', ex: 'Ele é/está' },
-                { sub: 'She', verb: 'is', ex: 'Ela é/está' },
-                { sub: 'It', verb: 'is', ex: 'Isto é/está' },
-            ]
-        },
-        {
-            type: 'conjugation',
-            pairs: [
-                { sub: 'We', verb: 'are', ex: 'Nós somos/estamos' },
-                { sub: 'They', verb: 'are', ex: 'Eles são/estão' },
+            type: 'list-card',
+            title: 'Perguntas Comuns',
+            items: [
+                { start: 'Am I?', end: 'Eu sou/estou?' },
+                { start: 'Is she?', end: 'Ela é/está?' },
+                { start: 'Are they?', end: 'Eles são/estão?' }
             ]
         },
 
-        // SECTION 5: QUIZ - ENGLISH
+        // FINAL QUIZ MIX
         {
             type: 'quiz',
-            question: 'Complete: She _____ my friend.',
+            question: 'Is he your father?',
             options: [
-                { text: 'are', correct: false },
-                { text: 'am', correct: false },
-                { text: 'is', correct: true }
+                { text: 'Yes, he are.', correct: false },
+                { text: 'Yes, he is.', correct: true },
+                { text: 'Yes, he am.', correct: false }
             ]
         },
         {
             type: 'quiz',
-            question: 'Traduza: "We are happy"',
+            question: 'Traduza: "Eles estão em casa?"',
             options: [
-                { text: 'Eles são felizes', correct: false },
-                { text: 'Nós somos felizes', correct: true },
-                { text: 'Você é feliz', correct: false }
+                { text: 'They are at home?', correct: false },
+                { text: 'Are they at home?', correct: true },
+                { text: 'Is they at home?', correct: false }
             ]
         },
 
-        // SECTION 6: MINDSET
-        {
-            type: 'text',
-            title: 'Mentalidade de Ouro',
-            content: 'Consistência > Intensidade. É melhor estudar 15 minutos TODOS os dias do que 5 horas só no sábado.',
-            highlight: 'Keep going!',
-            icon: <Star size={40} color="#fbbf24" />
-        },
-        {
-            type: 'text',
-            title: 'Não tenha medo do erro',
-            content: 'O erro é a prova de que você está tentando. Se você não errar, não aprende. Abrace o erro!',
-            highlight: 'Fail fast, learn faster.',
-            icon: <Check size={40} color="#10b981" />
-        },
-
-        // SECTION 7: COMMITMENT
-        {
-            type: 'commitment',
-            title: 'Seu Compromisso',
-            content: 'Eu me comprometo a fazer do inglês parte da minha vida diária.'
-        },
-
-        // FINAL
+        // CONCLUSION
         {
             type: 'completion',
-            title: 'Parabéns!',
-            subtitle: 'Você concluiu o onboarding. Agora a diversão começa de verdade na Semana 1.',
+            title: 'Missão Cumprida!',
+            subtitle: 'Você dominou a base do inglês. O Verbo To Be não é mais um mistério.',
+            score: true
         }
     ];
 
-    // --- LOGIC ---
     const handleNext = () => {
         if (currentSlide < slides.length - 1) {
             setFeedback(null);
@@ -187,139 +229,109 @@ const InteractiveWelcome = ({ onComplete }) => {
     const slide = slides[currentSlide];
     const progress = ((currentSlide + 1) / slides.length) * 100;
 
-    // --- RENDERERS ---
     return (
         <div className="interactive-container" style={{
             width: '100%',
             height: '100%',
             minHeight: '600px',
-            background: '#0f172a',
+            background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
             borderRadius: '16px',
             overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column',
-            position: 'relative'
+            position: 'relative',
+            color: 'white'
         }}>
-            {/* PROGRESS BAR */}
-            <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)' }}>
-                <div style={{
-                    width: `${progress}%`,
-                    height: '100%',
-                    background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)',
-                    transition: 'width 0.5s ease'
-                }} />
+            {/* PROGRESS */}
+            <div style={{ padding: '0 2rem', marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>{currentSlide + 1}/{slides.length}</span>
+                <div style={{ flex: 1, height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px' }}>
+                    <div style={{ width: `${progress}%`, height: '100%', background: '#38bdf8', borderRadius: '2px', transition: 'width 0.3s' }} />
+                </div>
             </div>
 
-            {/* CONTENT AREA */}
-            <div style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '2rem',
-                textAlign: 'center',
-                animation: 'fadeIn 0.5s ease'
-            }}>
-                <style>{`
-                    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-                    .slide-icon { margin-bottom: 1.5rem; filter: drop-shadow(0 0 15px rgba(255,255,255,0.3)); }
-                `}</style>
+            {/* CONTENT */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', textAlign: 'center' }}>
 
-                {/* --- COVER & SECTION TYPES --- */}
+                {/* HEADERS */}
                 {(slide.type === 'cover' || slide.type === 'section-break' || slide.type === 'completion') && (
-                    <div style={{ maxWidth: '600px' }}>
-                        <div className="slide-icon">{slide.icon || <Star size={60} color="#fbbf24" />}</div>
-                        <h1 style={{
-                            fontSize: '3rem',
-                            lineHeight: 1.1,
-                            marginBottom: '1rem',
-                            background: 'linear-gradient(to right, #fff, #94a3b8)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            fontWeight: 800
-                        }}>
-                            {slide.title}
-                        </h1>
-                        <p style={{ fontSize: '1.25rem', color: '#cbd5e1', lineHeight: 1.6 }}>{slide.subtitle || slide.content}</p>
-
-                        {slide.type === 'completion' && (
-                            <Button size="lg" onClick={() => onComplete && onComplete()} style={{ marginTop: '2rem', background: '#22c55e' }}>
-                                Concluir Aula
-                            </Button>
-                        )}
-                        {slide.type !== 'completion' && (
-                            <Button size="lg" onClick={handleNext} style={{ marginTop: '3rem' }}>
-                                Começar <ArrowRight style={{ marginLeft: '8px' }} />
-                            </Button>
+                    <div style={{ animation: 'fadeIn 0.5s' }}>
+                        <div style={{ marginBottom: '1.5rem' }}>{slide.icon || <Star size={50} color="#fbbf24" />}</div>
+                        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '1rem' }}>{slide.title}</h1>
+                        <p style={{ fontSize: '1.2rem', opacity: 0.8, maxWidth: '500px' }}>{slide.subtitle}</p>
+                        {slide.score && <div style={{ fontSize: '1.5rem', marginTop: '2rem', padding: '1rem', background: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}>Score: {score}</div>}
+                        {slide.type === 'completion' ? (
+                            <Button onClick={() => onComplete && onComplete()} style={{ marginTop: '2.5rem', background: '#22c55e', border: 'none' }} size="lg">Concluir <Check size={20} /></Button>
+                        ) : (
+                            <Button onClick={handleNext} style={{ marginTop: '3rem' }} size="lg">Começar <ArrowRight size={20} /></Button>
                         )}
                     </div>
                 )}
 
-                {/* --- TEXT CONTENT --- */}
+                {/* TEXT & CONCEPTS */}
                 {(slide.type === 'text' || slide.type === 'concept' || slide.type === 'info-card') && (
-                    <Card style={{
-                        maxWidth: '500px',
-                        padding: '2.5rem',
-                        background: 'rgba(30, 41, 59, 0.5)',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        backdropFilter: 'blur(10px)'
-                    }}>
-                        <div className="slide-icon">{slide.icon}</div>
-                        <h2 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'white' }}>{slide.title}</h2>
-                        <p style={{ fontSize: '1.1rem', color: '#cbd5e1', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                            {slide.content}
-                        </p>
-                        {slide.visual && <div style={{ fontSize: '3rem', margin: '1rem 0' }}>{slide.visual}</div>}
-                        {slide.example && (
-                            <div style={{
-                                background: 'rgba(0,0,0,0.3)',
-                                padding: '1rem',
-                                borderRadius: '8px',
-                                borderLeft: '4px solid #fcd34d',
-                                textAlign: 'left',
-                                color: '#fcd34d'
-                            }}>
-                                📌 {slide.example}
+                    <Card style={{ padding: '2.5rem', maxWidth: '600px', width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                        <div style={{ marginBottom: '1rem' }}>{slide.icon}</div>
+                        <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>{slide.title}</h2>
+                        <p style={{ fontSize: '1.1rem', lineHeight: 1.6, opacity: 0.9 }}>{slide.content}</p>
+                        {slide.example && <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(252, 211, 77, 0.1)', borderLeft: '4px solid #fcd34d', color: '#fcd34d', textAlign: 'left' }}>{slide.example}</div>}
+                        {slide.list && (
+                            <div style={{ marginTop: '1.5rem', textAlign: 'left', display: 'grid', gap: '0.8rem' }}>
+                                {slide.list.map((item, i) => <div key={i} style={{ padding: '0.8rem', background: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>{item}</div>)}
                             </div>
                         )}
-                        {slide.highlight && <p style={{ color: '#60a5fa', fontWeight: 600, fontSize: '1.1rem' }}>✨ {slide.highlight}</p>}
                     </Card>
                 )}
 
-                {/* --- CONJUGATION CARDS (User Request) --- */}
+                {/* CONJUGATION CARDS (REQUESTED DESIGN) */}
                 {slide.type === 'conjugation' && (
-                    <div style={{ width: '100%', maxWidth: '800px' }}>
-                        <h2 style={{ marginBottom: '2rem', fontSize: '2rem' }}>Combine & Aprenda</h2>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
+                    <div style={{ width: '100%', maxWidth: '900px' }}>
+                        <h2 style={{ marginBottom: '2rem', fontSize: '1.8rem', opacity: 0.8 }}>{slide.title}</h2>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
                             {slide.pairs.map((pair, idx) => (
                                 <div key={idx} style={{
-                                    background: 'rgba(255,255,255,0.03)',
-                                    border: '1px solid rgba(255,255,255,0.1)',
-                                    padding: '1.5rem',
-                                    borderRadius: '12px',
+                                    background: 'rgba(15, 23, 42, 0.6)',
+                                    border: '1px solid rgba(56, 189, 248, 0.2)',
+                                    padding: '2rem',
+                                    borderRadius: '16px',
                                     textAlign: 'left',
-                                    transition: 'transform 0.2s',
-                                    cursor: 'default'
-                                }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', fontSize: '1.5rem', fontWeight: 700 }}>
-                                        <span style={{ color: '#8b5cf6' }}>{pair.sub}</span>
-                                        <span style={{ color: 'rgba(255,255,255,0.3)' }}>+</span>
-                                        <span style={{ color: '#f43f5e' }}>{pair.verb}</span>
+                                    boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                                    transition: 'transform 0.2s'
+                                }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '0.8rem', fontSize: '1.8rem', fontWeight: 700 }}>
+                                        <span style={{ color: '#818cf8' }}>{pair.sub}</span>
+                                        <span style={{ color: 'rgba(255,255,255,0.2)' }}>+</span>
+                                        <span style={{ color: '#f472b6' }}>{pair.verb}</span>
                                     </div>
-                                    <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>"{pair.ex}"</p>
+                                    <p style={{ color: '#94a3b8', fontSize: '1rem' }}>"{pair.ex}"</p>
                                 </div>
                             ))}
                         </div>
                     </div>
                 )}
 
-                {/* --- QUIZ --- */}
+                {/* LIST CARDS */}
+                {slide.type === 'list-card' && (
+                    <div style={{ maxWidth: '600px', width: '100%' }}>
+                        <h2 style={{ marginBottom: '2rem' }}>{slide.title}</h2>
+                        <div style={{ display: 'grid', gap: '1rem' }}>
+                            {slide.items.map((item, i) => (
+                                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '1.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '1.2rem', fontWeight: 600 }}>{item.start}</span>
+                                    <ArrowRight size={16} style={{ opacity: 0.5 }} />
+                                    <span style={{ fontSize: '1.2rem', color: '#f43f5e' }}>{item.end}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* QUIZ */}
                 {slide.type === 'quiz' && (
                     <div style={{ maxWidth: '500px', width: '100%' }}>
-                        <h2 style={{ fontSize: '1.8rem', marginBottom: '2rem', fontWeight: 600 }}>Quiz Time!</h2>
-                        <Card style={{ padding: '2rem', background: 'rgba(15, 23, 42, 0.6)' }}>
-                            <p style={{ fontSize: '1.3rem', marginBottom: '2rem' }}>{slide.question}</p>
+                        <h2 style={{ fontSize: '1.5rem', marginBottom: '2rem', opacity: 0.8 }}>Quiz Rápido</h2>
+                        <Card style={{ padding: '2rem', background: '#1e293b', border: '1px solid rgba(255,255,255,0.1)' }}>
+                            <p style={{ fontSize: '1.4rem', marginBottom: '2rem', fontWeight: 600 }}>{slide.question}</p>
                             <div style={{ display: 'grid', gap: '1rem' }}>
                                 {slide.options.map((opt, idx) => (
                                     <button
@@ -327,17 +339,18 @@ const InteractiveWelcome = ({ onComplete }) => {
                                         onClick={() => handleAnswer(opt.correct)}
                                         disabled={feedback !== null}
                                         style={{
-                                            padding: '1rem',
-                                            borderRadius: '8px',
-                                            border: feedback && opt.correct ? '2px solid #22c55e' : (feedback === 'wrong' ? '1px solid #ef4444' : '1px solid rgba(255,255,255,0.2)'),
-                                            background: feedback && opt.correct ? 'rgba(34, 197, 94, 0.2)' : 'rgba(255,255,255,0.05)',
+                                            padding: '1.2rem',
+                                            borderRadius: '12px',
+                                            border: feedback && opt.correct ? '2px solid #22c55e' : (feedback === 'wrong' ? '1px solid #ef4444' : '1px solid rgba(255,255,255,0.1)'),
+                                            background: feedback && opt.correct ? 'rgba(34, 197, 94, 0.1)' : 'rgba(255,255,255,0.03)',
                                             color: 'white',
-                                            fontSize: '1rem',
+                                            fontSize: '1.1rem',
                                             cursor: 'pointer',
                                             textAlign: 'left',
                                             display: 'flex',
                                             alignItems: 'center',
-                                            justifyContent: 'space-between'
+                                            justifyContent: 'space-between',
+                                            fontWeight: 500
                                         }}
                                     >
                                         {opt.text}
@@ -345,68 +358,23 @@ const InteractiveWelcome = ({ onComplete }) => {
                                     </button>
                                 ))}
                             </div>
-                            {feedback === 'wrong' && <p style={{ color: '#ef4444', marginTop: '1rem' }}>Tente novamente!</p>}
+                            {feedback === 'wrong' && <p style={{ color: '#ef4444', marginTop: '1rem', animation: 'fadeIn 0.3s' }}>Tente de novo!</p>}
                         </Card>
                     </div>
                 )}
 
-                {/* --- COMMITMENT --- */}
-                {slide.type === 'commitment' && (
-                    <Card style={{
-                        maxWidth: '400px',
-                        padding: '2rem',
-                        transform: 'rotate(-1deg)',
-                        background: '#fff',
-                        color: '#0f172a'
-                    }}>
-                        <h3 style={{ fontFamily: 'monospace', fontSize: '1.5rem', marginBottom: '1rem' }}>OFFICIAL PLEDGE</h3>
-                        <p style={{ fontFamily: 'monospace', lineHeight: 1.6, marginBottom: '2rem' }}>
-                            "{slide.content}"
-                        </p>
-                        <div style={{ borderBottom: '2px solid #0f172a', width: '80%', height: '30px', margin: '0 auto' }} />
-                        <p style={{ fontSize: '0.7rem', marginTop: '0.5rem', opacity: 0.6 }}>YOUR SIGNATURE</p>
-                        <Button onClick={handleNext} style={{ marginTop: '2rem', width: '100%' }}>I Accept</Button>
-                    </Card>
-                )}
-
             </div>
 
-            {/* NAVIGATION FOOTER */}
+            {/* NAV */}
             {(slide.type !== 'cover' && slide.type !== 'completion') && (
-                <div style={{
-                    padding: '1.5rem',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    borderTop: '1px solid rgba(255,255,255,0.05)',
-                    background: 'rgba(0,0,0,0.2)'
-                }}>
-                    <button
-                        onClick={handlePrev}
-                        disabled={currentSlide === 0}
-                        style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                    >
-                        <ChevronLeft /> Voltar
-                    </button>
-                    <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.3)' }}>
-                        Slide {currentSlide + 1} de {slides.length}
-                    </span>
+                <div style={{ padding: '2rem', display: 'flex', justifyContent: 'space-between', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                    <Button variant="ghost" onClick={handlePrev} disabled={currentSlide === 0} style={{ color: 'rgba(255,255,255,0.5)' }}>
+                        <ChevronLeft /> Anterior
+                    </Button>
                     {slide.type !== 'quiz' && (
-                        <button
-                            onClick={handleNext}
-                            style={{
-                                background: 'white',
-                                color: 'black',
-                                border: 'none',
-                                padding: '0.5rem 1rem',
-                                borderRadius: '6px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', gap: '0.5rem'
-                            }}
-                        >
-                            Próximo <ChevronRight size={16} />
-                        </button>
+                        <Button onClick={handleNext}>
+                            Próximo <ChevronRight />
+                        </Button>
                     )}
                 </div>
             )}

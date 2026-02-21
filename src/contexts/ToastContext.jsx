@@ -9,6 +9,10 @@ let toastId = 0;
 export const ToastProvider = ({ children }) => {
     const [toasts, setToasts] = useState([]);
 
+    const removeToast = useCallback((id) => {
+        setToasts(prev => prev.filter(t => t.id !== id));
+    }, []);
+
     const addToast = useCallback((message, options = {}) => {
         const id = ++toastId;
         const {
@@ -27,11 +31,7 @@ export const ToastProvider = ({ children }) => {
         }
 
         return id;
-    }, []);
-
-    const removeToast = useCallback((id) => {
-        setToasts(prev => prev.filter(t => t.id !== id));
-    }, []);
+    }, [removeToast]);
 
     // Convenience methods
     const toast = {
@@ -49,6 +49,7 @@ export const ToastProvider = ({ children }) => {
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useToast = () => {
     const context = useContext(ToastContext);
     if (!context) {

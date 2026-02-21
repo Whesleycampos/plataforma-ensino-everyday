@@ -12,7 +12,7 @@ export const Card = ({
             className={`glass-panel ${className}`}
             style={{
                 padding: '1.5rem',
-                transition: 'var(--transition)',
+                transition: 'var(--transition-base)',
                 ...(hover ? { cursor: 'pointer' } : {}),
                 ...style
             }}

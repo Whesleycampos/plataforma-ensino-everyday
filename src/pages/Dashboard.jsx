@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Flame, Sparkles, Clock, ChevronRight, Shield, Users, BookOpen, TrendingUp, Sun, Moon, Menu } from 'lucide-react';
+import { Search, Flame, Sparkles, Clock, Shield, Users, BookOpen, TrendingUp, Sun, Moon } from 'lucide-react';
 import CourseCard from '../components/CourseCard';
-import Sidebar from '../components/Sidebar';
 import { Button } from '../components/ui/Button';
 import { supabase } from '../lib/supabase';
 import { useTheme } from '../contexts/ThemeContext';
@@ -16,7 +15,7 @@ const Dashboard = () => {
     const modules = courseCurriculum;
     const { theme, toggleTheme } = useTheme();
     const [isAdmin, setIsAdmin] = useState(false);
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
     const [stats, setStats] = useState({
         totalUsers: 0,
         activeUsers: 0,
@@ -24,58 +23,79 @@ const Dashboard = () => {
         totalLessons: 0
     });
 
-    // Detectar mobile para otimizações
+    // Detectar mobile para otimizacoes
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
                      window.innerWidth <= 768;
 
     const heroLessons = modules[0]?.lessons?.length ?? 0;
     const totalLessonsCount = modules.reduce((acc, m) => acc + m.lessons.length, 0);
 
-    useEffect(() => {
-        checkAdminStatus();
-        calculateStats();
-    }, []);
-
-    const checkAdminStatus = async () => {
+    const checkAdminStatus = useCallback(async () => {
         const { data: { user } } = await supabase.auth.getUser();
-        if (user && user.email === 'whesleycampos@hotmail.com') {
+        const adminEmail = (import.meta.env.VITE_ADMIN_EMAIL || 'whesleycampos@hotmail.com').toLowerCase();
+        if (user && user.email?.toLowerCase() === adminEmail) {
             setIsAdmin(true);
         }
-    };
+    }, []);
 
-    const calculateStats = () => {
-        const totalLessons = modules.reduce((acc, module) => acc + module.lessons.length, 0);
-        setStats(prev => ({ ...prev, totalLessons }));
-
-        // Buscar estatísticas reais do banco
-        fetchUserStats();
-    };
-
-    const fetchUserStats = async () => {
+    const fetchUserStats = useCallback(async () => {
         try {
-            // Total de usuários
             const { count: totalUsers } = await supabase
                 .from('profiles')
                 .select('*', { count: 'exact', head: true });
 
-            // Usuários ativos (com progresso nos últimos 7 dias)
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-            const { count: activeUsers } = await supabase
+            const { data: activeProgress } = await supabase
                 .from('student_progress')
-                .select('user_id', { count: 'exact', head: true })
+                .select('user_id')
                 .gte('completed_at', sevenDaysAgo.toISOString());
+
+            const uniqueActiveUsers = new Set((activeProgress || []).map((item) => item.user_id)).size;
 
             setStats(prev => ({
                 ...prev,
                 totalUsers: totalUsers || 0,
-                activeUsers: activeUsers || 0
+                activeUsers: uniqueActiveUsers
             }));
         } catch (error) {
-            console.error('Erro ao buscar estatísticas:', error);
+            console.error('Erro ao buscar estatisticas:', error);
         }
-    };
+    }, []);
+
+    const calculateStats = useCallback(async () => {
+        const totalLessons = modules.reduce((acc, module) => acc + module.lessons.length, 0);
+        setStats(prev => ({ ...prev, totalLessons }));
+        await fetchUserStats();
+    }, [fetchUserStats, modules]);
+
+    useEffect(() => {
+        const timeoutId = window.setTimeout(() => {
+            checkAdminStatus();
+            calculateStats();
+        }, 0);
+
+        return () => window.clearTimeout(timeoutId);
+    }, [calculateStats, checkAdminStatus]);
+
+    const filteredModules = useMemo(() => {
+        const normalizedQuery = searchQuery.trim().toLowerCase();
+        if (!normalizedQuery) {
+            return modules.map((module, originalIndex) => ({ module, originalIndex }));
+        }
+
+        return modules
+            .map((module, originalIndex) => ({ module, originalIndex }))
+            .filter(({ module }) => {
+                if (module.title.toLowerCase().includes(normalizedQuery)) return true;
+
+                return module.lessons.some((lesson) => {
+                    const lessonTitle = typeof lesson === 'object' ? lesson.title : lesson;
+                    return lessonTitle.toLowerCase().includes(normalizedQuery);
+                });
+            });
+    }, [modules, searchQuery]);
 
     return (
         <div className="dashboard-shell" id="main-content" role="main" data-mobile={isMobile} style={isMobile ? {
@@ -85,7 +105,6 @@ const Dashboard = () => {
             {!isMobile && <div className="stars" />}
             {!isMobile && <div className="dashboard-glow" />}
             {isMobile && <style>{`
-                /* Força otimizações mobile inline */
                 * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
                 .text-gradient-animated { animation: none !important; }
                 .course-card:hover { transform: none !important; }
@@ -93,19 +112,7 @@ const Dashboard = () => {
                 .pill { backdrop-filter: none !important; background: rgba(255,255,255,0.1) !important; }
             `}</style>}
 
-            {/* Mobile Sidebar */}
-            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
             <header className="topbar">
-                {/* Hamburger Menu Button - visible on tablet/mobile */}
-                <button
-                    className="hamburger-btn"
-                    onClick={() => setSidebarOpen(true)}
-                    aria-label="Abrir menu"
-                >
-                    <Menu size={24} />
-                </button>
-
                 <div className="brand" onClick={() => navigate('/dashboard')} style={{ cursor: 'pointer' }}>
                     <img
                         src="/logo-curso.png"
@@ -120,7 +127,12 @@ const Dashboard = () => {
 
                 <div className="topbar-search">
                     <Search size={18} style={{ color: 'var(--text-secondary)' }} />
-                    <input placeholder="Buscar aulas, temas ou professores" />
+                    <input
+                        placeholder="Buscar aulas, temas ou professores"
+                        aria-label="Buscar aulas"
+                        value={searchQuery}
+                        onChange={(event) => setSearchQuery(event.target.value)}
+                    />
                 </div>
 
                 <div className="topbar-actions">
@@ -142,14 +154,14 @@ const Dashboard = () => {
 
             <section className="hero" data-mobile={isMobile}>
                 <div className="hero__content">
-                    <span className="pill">Original Everyday · Intensivo</span>
-                    <h1 className={isMobile ? "" : "text-gradient-animated"}>Inglês com ritmo de streaming</h1>
+                    <span className="pill">Original Everyday - Intensivo</span>
+                    <h1 className={isMobile ? '' : 'text-gradient-animated'}>Ingles com ritmo de streaming</h1>
                     <p>
-                        Uma experiência premium de aprendizado contínuo: interface de streaming, lançamentos semanais e aulas rápidas para maratonar como se fosse sua série favorita.
+                        Uma experiencia premium de aprendizado continuo: interface de streaming, lancamentos semanais e aulas rapidas para maratonar como se fosse sua serie favorita.
                     </p>
                     <div className="hero__meta">
                         <span className="pill">Nova aula toda semana</span>
-                        <span className="pill">{modules.length} módulos</span>
+                        <span className="pill">{modules.length} modulos</span>
                         <span className="pill">{heroLessons}+ aulas iniciais</span>
                     </div>
                     <div className="hero__actions">
@@ -166,13 +178,13 @@ const Dashboard = () => {
                     <div className="eyebrow">Sua maratona</div>
                     <h3>Continue de onde parou</h3>
                     <p className="shelf__subtitle">
-                        Everyday Conversation em formato de temporada. Retorme o episódio em andamento ou descubra o próximo drop.
+                        Everyday Conversation em formato de temporada. Retome o episodio em andamento ou descubra o proximo drop.
                     </p>
                     <div className="hero__progress">
                         <div className="hero__progress-bar">
                             <span />
                         </div>
-                        <span className="pill" style={{ background: 'rgba(94, 231, 255, 0.1)' }}>37% concluído</span>
+                        <span className="pill" style={{ background: 'rgba(94, 231, 255, 0.1)' }}>37% concluido</span>
                     </div>
                     <div className="hero__chips">
                         <span className="pill"><Clock size={14} /> 12h assistidas</span>
@@ -188,13 +200,13 @@ const Dashboard = () => {
                         <p className="eyebrow">Curso Completo</p>
                         <h2 className="shelf__title">Todas as 20 Semanas</h2>
                         <p className="shelf__subtitle">
-                            {modules.length} semanas · {totalLessonsCount} aulas · Maratone em ordem ou escolha o tema que quer dominar.
+                            {filteredModules.length} de {modules.length} semanas - {totalLessonsCount} aulas.
                         </p>
                     </div>
                 </div>
 
                 <div className="shelf__grid">
-                    {modules.map((module, index) => (
+                    {filteredModules.map(({ module, originalIndex }, index) => (
                         <CourseCard
                             key={module.title}
                             title={module.title}
@@ -202,10 +214,16 @@ const Dashboard = () => {
                             lessons={module.lessons}
                             progress={Math.max(5, Math.min(95, 10 + (index * 4.5)))}
                             image="/poster-week-1.jpg"
-                            onClick={() => navigate('/course/1', { state: { moduleIndex: index } })}
+                            onClick={() => navigate('/course/1', { state: { moduleIndex: originalIndex } })}
                         />
                     ))}
                 </div>
+
+                {filteredModules.length === 0 && (
+                    <p className="shelf__subtitle" style={{ marginTop: '0.25rem' }}>
+                        Nenhuma semana encontrada para sua busca.
+                    </p>
+                )}
             </section>
 
             {isAdmin && (
@@ -216,7 +234,7 @@ const Dashboard = () => {
                         Painel de Administrador
                     </h2>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-                        Estatísticas e métricas da plataforma Everyday Conversation
+                        Estatisticas e metricas da plataforma Everyday Conversation
                     </p>
 
                     <div className="admin-grid">
@@ -225,7 +243,7 @@ const Dashboard = () => {
                             <p>{stats.totalUsers}</p>
                             <small>
                                 <Users size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
-                                Usuários cadastrados
+                                Usuarios cadastrados
                             </small>
                         </div>
 
@@ -234,16 +252,16 @@ const Dashboard = () => {
                             <p>{stats.activeUsers}</p>
                             <small>
                                 <TrendingUp size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
-                                Últimos 7 dias
+                                Ultimos 7 dias
                             </small>
                         </div>
 
                         <div className="admin-stat">
-                            <h3>Módulos Disponíveis</h3>
+                            <h3>Modulos Disponiveis</h3>
                             <p>{stats.totalModules}</p>
                             <small>
                                 <BookOpen size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
-                                Semanas de conteúdo
+                                Semanas de conteudo
                             </small>
                         </div>
 
@@ -252,7 +270,7 @@ const Dashboard = () => {
                             <p>{stats.totalLessons}</p>
                             <small>
                                 <Sparkles size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
-                                Vídeos + Quizzes
+                                Videos + Quizzes
                             </small>
                         </div>
                     </div>
