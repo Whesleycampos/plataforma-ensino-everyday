@@ -124,6 +124,7 @@ const CoursePlayer = () => {
                             const duration = typeof lessonItem === 'object' ? lessonItem.duration : '5 min';
                             const type = typeof lessonItem === 'object' ? lessonItem.type : 'video';
                             const component = typeof lessonItem === 'object' ? lessonItem.component : null;
+                            const activityLinksData = typeof lessonItem === 'object' ? lessonItem.activity_links : null;
 
                             return {
                                 id: dbLesson?.id || `legacy-${modIndex}-${lessIndex}`,
@@ -132,7 +133,8 @@ const CoursePlayer = () => {
                                 video_url: videoUrl,
                                 type: type,
                                 component: component,
-                                isPlaceholder: !videoUrl
+                                isPlaceholder: !videoUrl,
+                                activity_links: activityLinksData || null
                             };
                         })
                     };
@@ -169,8 +171,9 @@ const CoursePlayer = () => {
         }
     };
 
-    const activeLesson = flatLessons.find(l => l.id === activeLessonId) ||
-        modules.flatMap(m => m.lessons).find(l => l.id === activeLessonId);
+    // Prioriza modules (courseCurriculum) para manter título e activity_links corretos
+    const activeLesson = modules.flatMap(m => m.lessons).find(l => l.id === activeLessonId) ||
+        flatLessons.find(l => l.id === activeLessonId);
 
     // Criar lookup map uma única vez para melhor performance (O(1) vs O(n²))
     const lessonActivityMap = useMemo(() => {
@@ -188,10 +191,16 @@ const CoursePlayer = () => {
         return map;
     }, []); // Só cria uma vez no mount
 
-    // Encontrar activity_links usando lookup O(1)
+    // Encontrar activity_links: prioriza dados diretos do módulo mesclado (courseCurriculum)
     const activityLinks = useMemo(() => {
         if (!activeLesson) return null;
 
+        // Fonte direta do courseCurriculum (mais confiável)
+        if (activeLesson.activity_links && activeLesson.activity_links.length > 0) {
+            return activeLesson.activity_links;
+        }
+
+        // Fallback: lookup por título normalizado
         const normalizeTitle = (title) => title.toLowerCase().trim().replace(/\s+/g, ' ');
         const activeNormalized = normalizeTitle(activeLesson.title);
 
