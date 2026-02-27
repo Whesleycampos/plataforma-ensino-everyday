@@ -753,11 +753,7 @@ export const courseCurriculum = [
             },
             {
                 title: "Inglês com Filmes - The Persuit of Happiness",
-                duration: "5 min",
-                activity_links: [
-                    { title: "Estudo The Pursuit of Happiness", url: "https://thepersuitofhappiness.netlify.app/" },
-                    { title: "Quiz The Pursuit of Happiness", url: "https://thepersuitofhappinessquiz.netlify.app/" }
-                ]
+                duration: "5 min"
             },
             {
                 title: "Texto e Áudio - Study Shows People Prefer Natural Products",
@@ -790,11 +786,7 @@ export const courseCurriculum = [
             },
             {
                 title: "Serie - Transformers",
-                duration: "5 min",
-                activity_links: [
-                    { title: "Estudo Transformers 2", url: "https://transformers2.netlify.app/" },
-                    { title: "Quiz Transformers", url: "https://transformersquiz.netlify.app/" }
-                ]
+                duration: "5 min"
             },
             {
                 title: "Texto e Áudio - The Art of Accepting 'No': Rejection Therapy",
