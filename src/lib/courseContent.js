@@ -56,7 +56,7 @@ export const courseCurriculum = [
                 video_url: "https://vimeo.com/1162129967",
                 activity_links: [
                     { title: "Exemplos Do/Does/Did", url: "https://everydayconversationexemplosdodiddoes.netlify.app/" },
-                    { title: "Quiz Do/Does/Did", url: "https://everydayconversationquizdodoesdid.netlify.app/" }
+                    { title: "Quiz Do/Does/Did", url: "https://everydayconversationquizdodoesdidv2.netlify.app/" }
                 ]
             },
             {
