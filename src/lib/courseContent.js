@@ -251,7 +251,7 @@ export const courseCurriculum = [
                 video_url: "https://iframe.mediadelivery.net/embed/588018/0cfda69c-c26a-45c4-8553-ce1d439febe9?autoplay=false",
                 activity_links: [
                     { title: "Exemplos Make e Do", url: "https://everydayconversationexemplosmakeedo.netlify.app/" },
-                    { title: "Quiz Make vs Do", url: "https://everydayconversationquizmakevsdo.netlify.app/" }
+                    { title: "Quiz Make vs Do", url: "https://everydayconversationquizmakevsdov2.netlify.app/" }
                 ]
             },
             {
