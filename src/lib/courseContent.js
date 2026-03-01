@@ -53,7 +53,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 4 - Do, Does, Did - Curso Everyday Conversation",
                 duration: "5 min",
-                video_url: "https://vimeo.com/1162129967",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/0827c7da-aeb3-41cf-b501-82922567983b?autoplay=false",
                 activity_links: [
                     { title: "Exemplos Do/Does/Did", url: "https://everydayconversationexemplosdodiddoes.netlify.app/" },
                     { title: "Quiz Do/Does/Did", url: "https://everydayconversationquizdodoesdidv2.netlify.app/" }
