@@ -307,6 +307,7 @@ export const courseCurriculum = [
             {
                 title: "Como usar Borrow e Lend?",
                 duration: "5 min",
+                video_url: "https://everydayconversationborrowlend.netlify.app/",
                 activity_links: [
                     { title: "Borrow vs Lend - Teoria", url: "https://everydayconversationborrowlend.netlify.app/" },
                     { title: "Exemplos Borrow e Lend", url: "https://everydayconversationborrowlendexemplo.netlify.app/" },
@@ -316,6 +317,7 @@ export const courseCurriculum = [
             {
                 title: "Como usar Than, Them, Then?",
                 duration: "5 min",
+                video_url: "https://everydayconversationthanthenthem.netlify.app/",
                 activity_links: [
                     { title: "Than, Then, Them - Teoria", url: "http://everydayconversationthanthenthem.netlify.app/" },
                     { title: "Exemplos Than, Then, Them", url: "https://everydayconversationthanthenthemexemp.netlify.app/" },
@@ -366,6 +368,7 @@ export const courseCurriculum = [
             {
                 title: "Como fazer pedidos com educação? (Hotel, restaurante ...)",
                 duration: "5 min",
+                video_url: "https://everydayconversationpedidos.netlify.app/",
                 activity_links: [
                     { title: "Pedidos com Educação", url: "https://everydayconversationpedidos.netlify.app/" }
                 ]
@@ -373,6 +376,7 @@ export const courseCurriculum = [
             {
                 title: "Quando usar Bring x Take",
                 duration: "5 min",
+                video_url: "https://everydayconversationtakevsbring.netlify.app/",
                 activity_links: [
                     { title: "Take vs Bring - Teoria", url: "https://everydayconversationtakevsbring.netlify.app/" },
                     { title: "Exemplos Bring vs Take", url: "https://everydayconversationbringvstakeexempl.netlify.app/" },
@@ -418,6 +422,7 @@ export const courseCurriculum = [
             {
                 title: "Quando Usar \"Hope vs Wish\"",
                 duration: "5 min",
+                video_url: "https://everydayconversationhopevswish.netlify.app/",
                 activity_links: [
                     { title: "Hope vs Wish - Teoria", url: "https://everydayconversationhopevswish.netlify.app/" },
                     { title: "Exemplos Wish e Hope", url: "https://everydayconversationwishhopeexemplos.netlify.app/" },
@@ -427,6 +432,7 @@ export const courseCurriculum = [
             {
                 title: "Quando Usar Say vs Tell vs Speak",
                 duration: "5 min",
+                video_url: "https://everydayconversationsaytellspeak.netlify.app/",
                 activity_links: [
                     { title: "Say, Tell, Speak - Teoria", url: "https://everydayconversationsaytellspeak.netlify.app/" },
                     { title: "Exemplos Say, Tell, Speak", url: "https://everydayconversationsaytellspeakexemp.netlify.app/" },
@@ -476,6 +482,7 @@ export const courseCurriculum = [
             {
                 title: "Como usar Shop vs Buy vs Purchase vs Afford",
                 duration: "5 min",
+                video_url: "https://everydayconversationbuyshopteoria.netlify.app/",
                 activity_links: [
                     { title: "Buy, Shop - Teoria", url: "https://everydayconversationbuyshopteoria.netlify.app/" },
                     { title: "Exemplos Buy, Shop", url: "https://everydayconversationbuyshopexemplos.netlify.app/" },
@@ -485,6 +492,7 @@ export const courseCurriculum = [
             {
                 title: "Quando usar Until vs By Para tempo!",
                 duration: "5 min",
+                video_url: "https://everydayconversationuntilvsby.netlify.app/",
                 activity_links: [
                     { title: "Until vs By - Teoria", url: "https://everydayconversationuntilvsby.netlify.app/" },
                     { title: "Exemplos Until vs By (Tempo)", url: "https://everydayconversationuntilvsbytempo.netlify.app/" },
@@ -548,6 +556,7 @@ export const courseCurriculum = [
             {
                 title: "Some x Any – Uso em frases afirmativas, negativas e interrogativas.",
                 duration: "5 min",
+                video_url: "https://everydayconversationanyvssome.netlify.app/",
                 activity_links: [
                     { title: "Any vs Some - Teoria", url: "https://everydayconversationanyvssome.netlify.app/" },
                     { title: "Exemplos Some vs Any", url: "https://everydayconversationsomevsanyexemplos.netlify.app/" },
@@ -594,6 +603,7 @@ export const courseCurriculum = [
             {
                 title: "Much x Many – Quando usar com substantivos contáveis e incontáveis.",
                 duration: "5 min",
+                video_url: "https://everydayconversationmanyvsmuch.netlify.app/",
                 activity_links: [
                     { title: "Many vs Much - Teoria", url: "https://everydayconversationmanyvsmuch.netlify.app/" },
                     { title: "Exemplos Many vs Much", url: "https://everydayconversationmanyvsmuchexemplo.netlify.app/" },
@@ -644,6 +654,7 @@ export const courseCurriculum = [
             {
                 title: "Farther vs Further - Quando usar?",
                 duration: "5 min",
+                video_url: "https://everydayconversationfarthervsfurther.netlify.app/",
                 activity_links: [
                     { title: "Farther vs Further - Teoria", url: "https://everydayconversationfarthervsfurther.netlify.app/" },
                     { title: "Exemplos Farther e Further", url: "https://everydayconversationfartherfurtherexe.netlify.app/" },
