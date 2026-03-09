@@ -125,7 +125,8 @@ export const courseCurriculum = [
             },
             {
                 title: "Música 3 - \"You're Beautiful\" - James Blunt",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/cda4cdc8-276d-460c-b913-8dc4b28b1a1a?autoplay=false"
             }
         ]
     },
@@ -143,6 +144,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 10.1 - Excelente site para Atividades de Fixação",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/e09707fc-3062-4941-a520-c5939285d778?autoplay=false",
                 activity_links: [
                     { title: "Prática Interativa Alfabeto", url: "https://www.languageguide.org/english/alphabet" }
                 ]
@@ -175,7 +177,8 @@ export const courseCurriculum = [
             },
             {
                 title: "Música 4 - Stand By Me",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/dd35dbe4-6823-4e13-b8aa-6662eae766cf?autoplay=false"
             }
         ]
     },
@@ -220,7 +223,8 @@ export const courseCurriculum = [
             },
             {
                 title: "Música 5 - Someone like you Adele",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/24fb75da-a309-4ccd-85ce-c14e4b1c8c6b?autoplay=false"
             }
         ]
     },
@@ -269,7 +273,8 @@ export const courseCurriculum = [
             },
             {
                 title: "Música 6 - Spending My Time",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/33404e05-a6b8-430c-a318-9db6837b35dd?autoplay=false"
             }
         ]
     },
@@ -296,7 +301,8 @@ export const courseCurriculum = [
             },
             {
                 title: "Música 7 - Always On My Mind Elvis Presley",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/c889de67-bec4-45e3-9c62-a9d04daf2716?autoplay=false"
             },
             {
                 title: "Como usar Borrow e Lend?",
@@ -354,7 +360,8 @@ export const courseCurriculum = [
             },
             {
                 title: "Música 8 - If I Were I Boy",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/ff59fae8-2b4e-48d1-b1f9-f18f8e66d091?autoplay=false"
             },
             {
                 title: "Como fazer pedidos com educação? (Hotel, restaurante ...)",
@@ -384,6 +391,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 25 - Anything, Everything, Nothing",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/a1955187-105b-48d5-96ea-604549f3ad30?autoplay=false",
                 activity_links: [
                     { title: "Exemplos Anything, Everything, Nothing", url: "https://everydayconversationanythinkexample.netlify.app/" },
                     { title: "Quiz Anything", url: "https://everydayconversationquizanything.netlify.app/" }
@@ -431,7 +439,8 @@ export const courseCurriculum = [
             },
             {
                 title: "Inglês com Música - Just the way you are - Bruno Mars",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/b6ef6e0d-684b-4822-a45f-76396dbc231d?autoplay=false"
             }
         ]
     },
@@ -485,6 +494,7 @@ export const courseCurriculum = [
             {
                 title: "Inglês com Series - Friends",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/2e9222d4-c04c-4318-8fb1-7b541a8c0b35?autoplay=false",
                 activity_links: [
                     { title: "Estudo com a Série Friends", url: "https://estudocomaseriefriends.netlify.app/" },
                     { title: "Quiz Friends", url: "https://everydayconversationfriendsquiz.netlify.app/" }
@@ -492,7 +502,8 @@ export const courseCurriculum = [
             },
             {
                 title: "Inglês com Música - The Police - Every Breath you take",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/81d06064-80ac-482b-bfb5-891e0a1b13b5?autoplay=false"
             }
         ]
     },
@@ -510,6 +521,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 32 - Short Answers",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/8450eb2a-19b2-4479-80e5-deecd3dc55fd?autoplay=false",
                 activity_links: [
                     { title: "Exemplos Short Answers", url: "https://everydayconversationshortanswers.netlify.app/" },
                     { title: "Quiz Short Answers", url: "https://everydayconversationquizshortanswerss.netlify.app/" }
@@ -527,6 +539,7 @@ export const courseCurriculum = [
             {
                 title: "Inglês com Séries - Sheldon",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/12cc2417-3cfb-4ca9-af72-d02787546e1a?autoplay=false",
                 activity_links: [
                     { title: "Estudo com Sheldon", url: "https://everydayconversationsheldon.netlify.app/" },
                     { title: "Quiz Sheldon", url: "https://quizsheldon.netlify.app/" }
@@ -543,7 +556,8 @@ export const courseCurriculum = [
             },
             {
                 title: "Inglês com Música - Dancing Queen ABBA",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/99a5f859-6150-499b-b351-855d74a64709?autoplay=false"
             }
         ]
     },
@@ -553,6 +567,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 34 - Hypothetical Meaning",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/ea697a88-b821-4311-a8dd-b8e70d2538ce?autoplay=false",
                 activity_links: [
                     { title: "Exemplos Hypothetical Meaning", url: "https://everydayconversationhypotheticalmeani.netlify.app/" },
                     { title: "Quiz Hypothetical", url: "https://everydayconversationquizhypothetical.netlify.app/" }
@@ -561,6 +576,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 35 - Irregular Verbs",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/d3166136-0b74-436e-b747-1c5dbe8b9360?autoplay=false",
                 activity_links: [
                     { title: "Exemplos Irregular Verbs", url: "https://everydayconversationirregularverbs.netlify.app/" },
                     { title: "Quiz Verbos Irregulares", url: "https://everydayconversationverboirregular.netlify.app/" }
@@ -569,6 +585,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 36 - Voz Passiva",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/2adfa99b-4f2c-423d-bdb9-2923f3499308?autoplay=false",
                 activity_links: [
                     { title: "Exemplos Voz Passiva", url: "https://everydayconversationvozpassiva.netlify.app/" },
                     { title: "Quiz Voz Passiva", url: "https://everydayconversationquizvozpassiva.netlify.app/" }
@@ -590,6 +607,7 @@ export const courseCurriculum = [
             {
                 title: "Inglês com Series - Gravity Falls",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/98675f58-1bf2-4f60-a4cb-73510338baaa?autoplay=false",
                 activity_links: [
                     { title: "Estudo com Série Gravity Falls", url: "https://everydayconversationaulacomserie.netlify.app/" },
                     { title: "Quiz Série Desenho", url: "https://seriadodesenho.netlify.app/" }
@@ -597,7 +615,8 @@ export const courseCurriculum = [
             },
             {
                 title: "Inglês com Música - More than words Extreme",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/502dadc5-d039-4268-a62c-b938e0d29d7b?autoplay=false"
             }
         ]
     },
@@ -607,6 +626,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 37 - Reflexive Pronouns",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/55fa346b-96e6-4e76-b48e-e8cb3f510ab3?autoplay=false",
                 activity_links: [
                     { title: "Reflexive Pronoun - Teoria", url: "https://everydayconversationreflexivepronoun.netlify.app/" },
                     { title: "Exemplos Reflexive Pronouns", url: "https://everydayconversationreflexivepronouns.netlify.app/" }
@@ -615,6 +635,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 38 - Comparative vs Superlatives",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/52518679-d4eb-46f5-875b-83c91c937397?autoplay=false",
                 activity_links: [
                     { title: "Exemplos Comparativo e Superlativo", url: "https://everydayconversationcomparativoesuper.netlify.app/" },
                     { title: "Quiz Comparativo", url: "https://everydayconversationcomparativoquiz.netlify.app/" }
@@ -632,6 +653,7 @@ export const courseCurriculum = [
             {
                 title: "Inglês com Series - Eu a patroa e as crianças",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/0cb444f9-c0ce-4950-996e-678a7878e7b6?autoplay=false",
                 activity_links: [
                     { title: "Estudo Eu a Patroa e as Crianças", url: "https://euapatroaeascriancas1.netlify.app/" },
                     { title: "Quiz Eu a Patroa e as Crianças", url: "https://quizeuapatroaeascriancas.netlify.app/" }
@@ -639,7 +661,8 @@ export const courseCurriculum = [
             },
             {
                 title: "Inglês com Música - bon jovi always",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/7c94b199-59a5-4ec8-a144-780d1e65cbc0?autoplay=false"
             }
         ]
     },
@@ -649,6 +672,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 39 - Apóstrofo",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/45c160cd-f0a9-499d-935a-601d96b40ef8?autoplay=false",
                 activity_links: [
                     { title: "Exemplos Apóstrofo", url: "https://everydayconversationapostrofoexemplos.netlify.app/" },
                     { title: "Quiz Apóstrofo", url: "https://everydayconversationapostrofoquiz.netlify.app/" }
@@ -657,6 +681,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 40 - Silent Letters",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/626be558-e002-492a-a1fb-0a464e20a9f3?autoplay=false",
                 activity_links: [
                     { title: "Exemplos Silent Letters", url: "https://everydayconversationsilentletters.netlify.app/" },
                     { title: "Quiz Silent Letters", url: "https://everydayconversationquizsilentletters.netlify.app/" }
@@ -664,11 +689,13 @@ export const courseCurriculum = [
             },
             {
                 title: "Inglês com Música - How Deep Is Your Love",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/48e2a30e-5cef-45d7-aba9-a7de46510477?autoplay=false"
             },
             {
                 title: "Inglês com séries -The Big Bang Theory",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/c0d767ff-eb7c-4b09-a1a9-4d320345f4e2?autoplay=false",
                 activity_links: [
                     { title: "Estudo Big Bang Theory 2", url: "https://bigbangtheory2.netlify.app/" },
                     { title: "Quiz The Big Bang Theory", url: "https://quizthebigbanktheory.netlify.app/" }
@@ -694,6 +721,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 41 - Past Continuous",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/b91b643d-ddca-4c2f-8997-af45c236f377?autoplay=false",
                 activity_links: [
                     { title: "Exemplos Past Continuous", url: "https://everydayconversationpastcontinuous.netlify.app/" },
                     { title: "Quiz Past Continuous", url: "https://everydayconversationquizpastcontinuou.netlify.app/" }
@@ -702,6 +730,7 @@ export const courseCurriculum = [
             {
                 title: "Aula 42 - Future Contínuos",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/7234d8fb-89ea-40fe-85e3-7c7657e6d8c7?autoplay=false",
                 activity_links: [
                     { title: "Exemplos Future Continuous", url: "https://everydayconversationfuturecontinuouse.netlify.app/" },
                     { title: "Quiz Future Continuous", url: "https://everydayconversationfuturecontinuous.netlify.app/" }
@@ -709,11 +738,13 @@ export const courseCurriculum = [
             },
             {
                 title: "Inglês com Músicas: Avril Lavigne - I'm with You",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/37394ae9-410d-4024-804f-ae5ec2b87ebd?autoplay=false"
             },
             {
                 title: "Inglês com Series - Frinds (2)",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/3bacf6cc-8603-4722-9c56-b2c0fa2a751d?autoplay=false",
                 activity_links: [
                     { title: "Estudo Friends 2", url: "https://everydayconversationfriends2.netlify.app/" },
                     { title: "Quiz Friends 2", url: "https://quizfriends2.netlify.app/" }
@@ -739,21 +770,25 @@ export const courseCurriculum = [
             {
                 title: "43 - GET",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/6b3d80ff-991e-4a14-8c19-ae2f03416a99?autoplay=false",
                 activity_links: [
                     { title: "Exemplos GET", url: "https://everydayconversationgetexemplos.netlify.app/" }
                 ]
             },
             {
                 title: "Aula 44 TO x FOR",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/9a819208-3c01-434b-a450-955dc6d12214?autoplay=false"
             },
             {
                 title: "Inglês com Música - Please Forgive me - Bryan Adans",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/6dfbcf05-fd18-441b-a729-a81ba89c9294?autoplay=false"
             },
             {
                 title: "Inglês com Filmes - The Persuit of Happiness",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/8278fe5e-753b-4bf2-acbb-34476ec8b539?autoplay=false"
             },
             {
                 title: "Texto e Áudio - Study Shows People Prefer Natural Products",
@@ -774,19 +809,23 @@ export const courseCurriculum = [
         lessons: [
             {
                 title: "Big Girls Don't Cry - Fergie Inglês com Música",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/b22457cf-4a6d-4ca9-b8c6-b1423b1163c8?autoplay=false"
             },
             {
                 title: "How Am I Supposed to Live Without you",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/962934cc-27f9-4d5f-9f9c-6d3773222e0c?autoplay=false"
             },
             {
                 title: "On bended Knee - Inglês com Música",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/3564fee3-a3e9-48d3-925e-173024e99ce5?autoplay=false"
             },
             {
                 title: "Serie - Transformers",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/32662a41-9a85-4276-9506-d737ab78aab1?autoplay=false"
             },
             {
                 title: "Texto e Áudio - The Art of Accepting 'No': Rejection Therapy",
@@ -812,6 +851,7 @@ export const courseCurriculum = [
             {
                 title: "Suits 2 - Inglês com séries",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/10754782-f682-4b6a-b0e6-8042f6bee94e?autoplay=false",
                 activity_links: [
                     { title: "Estudo Suits 2", url: "https://everydayconversationsuits2.netlify.app/" },
                     { title: "Quiz Suits 2", url: "https://everydayconversationquizsuits2.netlify.app/" }
@@ -820,6 +860,7 @@ export const courseCurriculum = [
             {
                 title: "Friends 4 - Inglês com séries",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/7f5c9f44-618f-41ee-a979-34e4f236d40b?autoplay=false",
                 activity_links: [
                     { title: "Estudo Friends 3", url: "https://everydayconversationseriesfriends3.netlify.app/" }
                 ]
@@ -827,6 +868,7 @@ export const courseCurriculum = [
             {
                 title: "Friends 3 - Inglês com Séries - Em Andamento",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/33827f88-26d5-4180-bf6c-6d19c9387c79?autoplay=false",
                 activity_links: [
                     { title: "Estudo Friends 3 (Alternativo)", url: "https://everydayconversationfriends3.netlify.app/" }
                 ]
@@ -839,6 +881,7 @@ export const courseCurriculum = [
             {
                 title: "Grey's Anatomy - Inglês com Séries - Andamento",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/08656a9a-7337-435c-9e68-dadc27e58b6c?autoplay=false",
                 activity_links: [
                     { title: "Estudo Grey's Anatomy", url: "https://everydayconversationinglescomgraysana.netlify.app/" }
                 ]
@@ -846,6 +889,7 @@ export const courseCurriculum = [
             {
                 title: "Suits4 - Inglês com séries",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/f2dc785a-ee73-428b-8312-c0aec419e857?autoplay=false",
                 activity_links: [
                     { title: "Estudo Suits 2 (Part 2)", url: "https://everydaysuits2.netlify.app/" }
                 ]
@@ -853,6 +897,7 @@ export const courseCurriculum = [
             {
                 title: "The Big Bang Theory 2 - Inglês com séries",
                 duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/a60a72d1-cf26-4c53-a395-40b719b64ceb?autoplay=false",
                 activity_links: [
                     { title: "Estudo Big Bang Theory", url: "https://everydayconversationthebigbank.netlify.app/" }
                 ]
@@ -864,11 +909,13 @@ export const courseCurriculum = [
         lessons: [
             {
                 title: "The Devil wears Prada - Inglês com séries",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/59a30c42-d617-4048-9208-47a7b1ed8558?autoplay=false"
             },
             {
                 title: "Suits2_part 2 - Inglês com séries",
-                duration: "5 min"
+                duration: "5 min",
+                video_url: "https://iframe.mediadelivery.net/embed/588018/85242e5e-e562-47f3-949f-7573c3031cbc?autoplay=false"
             }
         ]
     }
